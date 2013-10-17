@@ -1,14 +1,4 @@
-//***********************************************************************//
-//																		 //
-//		- "Talk to me like I'm a 3 year old!" Programming Lessons -		 //
-//                                                                       //
-//		$Author:		Ben Humphrey	digiben@gametutorilas.com		 //
-//																		 //
-//		$Program:		Triangle										 //
-//																		 //
-//		$Description:	Init OpenGL and draw a triangle to the screen	 //
-//																		 //
-//***********************************************************************//
+
 
 // This is a compiler directive that includes libraries (For Visual Studio).
 // You can manually include the libraries in the "Project->settings" menu under
@@ -95,7 +85,7 @@ HWND CreateMyWindow(LPSTR strWindowName, int width, int height, DWORD dwStyle, b
 	wndclass.hIcon = LoadIcon(NULL, IDI_APPLICATION);	// General icon
 	wndclass.hCursor = LoadCursor(NULL, IDC_ARROW);		// An arrow for the cursor
 	wndclass.hbrBackground = (HBRUSH) (COLOR_WINDOW+1);	// A white window
-	wndclass.lpszClassName = "GameTutorials";			// Assign the class name
+	wndclass.lpszClassName = "CodeGalaxy";			// Assign the class name
 
 	RegisterClass(&wndclass);							// Register the class
 	
@@ -124,7 +114,7 @@ HWND CreateMyWindow(LPSTR strWindowName, int width, int height, DWORD dwStyle, b
 	AdjustWindowRect( &rWindow, dwStyle, false);		// Adjust Window To True Requested Size
 
 														// Create the window
-	hWnd = CreateWindow("GameTutorials", strWindowName, dwStyle, 0, 0,
+	hWnd = CreateWindow("CodeGalaxy", strWindowName, dwStyle, 0, 0,
 						rWindow.right  - rWindow.left, rWindow.bottom - rWindow.top, 
 						NULL, NULL, hInstance, NULL);
 
@@ -348,7 +338,7 @@ void DeInit()
 		ShowCursor(TRUE);								// Show Mouse Pointer
 	}
 
-	UnregisterClass("GameTutorials", g_hInstance);		// Free the window class
+	UnregisterClass("CodeGalaxy", g_hInstance);		// Free the window class
 
 	PostQuitMessage (0);								// Post a QUIT message to the window
 }
@@ -370,7 +360,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hprev, PSTR cmdline, int ishow
 	
 	// Create our window with our function we create that passes in the:
 	// name, width, height, any flags for the window, if we want fullscreen of not, and the hInstance.
-	hWnd = CreateMyWindow("www.GameTutorials.com - First OpenGL Program", SCREEN_WIDTH, SCREEN_HEIGHT, 0, g_bFullScreen, hInstance);
+	hWnd = CreateMyWindow("CodeGalaxy", SCREEN_WIDTH, SCREEN_HEIGHT, 0, g_bFullScreen, hInstance);
 
 	// If we never got a valid window handle, quit the program
 	if(hWnd == NULL) return TRUE;
