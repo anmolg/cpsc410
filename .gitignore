@@ -1,5 +1,10 @@
 *.[oa]
 *~
-.txt
+*.txt
 
 Debug/
+ipch/
+*.opensdf
+*.sdf
+*.suo
+*.user
