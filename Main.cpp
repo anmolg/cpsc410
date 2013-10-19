@@ -555,4 +555,4 @@ LRESULT CALLBACK WinProc(HWND hWnd,UINT uMsg, WPARAM wParam, LPARAM lParam)
 // 3D programming is by FAR the coolest thing to program.
 //
 //
-// © 2000-2006 GameTutorials
+// ?2000-2006 GameTutorials
