@@ -37,6 +37,7 @@ void RenderScene();
 
 void ChangeToFullScreen()
 {
+	// checking github
 	DEVMODE dmSettings;									// Device Mode variable
 
 	memset(&dmSettings,0,sizeof(dmSettings));			// Makes Sure Memory's Cleared
