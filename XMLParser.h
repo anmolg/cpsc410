@@ -16,7 +16,7 @@ public:
 	~XMLParser() {};
 
 	// parse a file and write the output in the vectors
-	bool parse(	const char *filename, std::vector<GPackage> *packages);
+	bool parse(	const char *filename, std::vector<GVersion> *versions);
 };
 
 #endif
