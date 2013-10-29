@@ -45,11 +45,11 @@ void Init(HWND hWnd)
 
 void initVersions() {
 	// Testing data
-	GMethod method1 = GMethod();
-	method1.creationTime = 1; method1.methodName = "method1";
+	GMethod method1 = GMethod(); 
+	method1.creationTime = 1; method1.endTime = 3; method1.methodName = "method1";
 
 	GMethod method2 = GMethod();
-	method2.creationTime = 2; method2.methodName = "method2";
+	method2.creationTime = 2; method2.endTime = 6; method2.methodName = "method2";
 
 	GClass class1 = GClass();
 	class1.creationTime=1; class1.className = "class1";
@@ -154,7 +154,8 @@ void drawSphere(float sphereRadius, float orbitRadius, float orbitSpeed)
 void drawMethod(GMethod gm, int index) {
 	// checking whether the moon should be displayed
 	// displays when creationTime <= commitNumber < endTime
-	if ((commitNumber < gm.creationTime) && (commitNumber >= gm.endTime)) return;
+	if (commitNumber < gm.creationTime) return;
+	if (commitNumber >= gm.endTime) return;
 	glColor3f(1,1,1);
 	//int randomAngle = rand()%360; // THIS DID NOT WORK BECUZ IT GENERATES RANDOM STUFF EVERY TIME
 	//float randomX = rand()%100 / 100.0;
