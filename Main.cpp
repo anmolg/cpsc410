@@ -4,7 +4,8 @@
 
 #include "main.h"										// This includes our header file
 #include "Camera.h"
-
+#include <stdlib.h>     /* srand, rand */
+#include <time.h>       /* g_time */
 CCamera g_Camera;										// This is our global camera object
 
 bool  g_bFullScreen = true;								// Set full screen as default
@@ -16,7 +17,14 @@ HINSTANCE g_hInstance;									// This holds the global hInstance for Unregister
 
 GVersion version = GVersion(1);
 float commitTimeInterval = 3.0;
-float time = 0.0;
+float g_time = 0.0;
+float commitNumber;
+
+#define STAR_RADIUS 2
+#define PLANET_RADIUS 1
+#define PLANET_DISTANCE 5
+#define MOON_RADIUS 0.5
+#define MOON_DISTANCE 1
 ///////////////////////////////// INIT GAME WINDOW \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
 /////
 /////	This function initializes the game window.
@@ -30,7 +38,7 @@ void Init(HWND hWnd)
 	InitializeOpenGL(g_rRect.right, g_rRect.bottom);	// Init OpenGL with the global rect
 	initVersions();
 	// Init our camera position
-
+	srand (time(NULL));
 						// Position        View		   Up Vector
 	g_Camera.PositionCamera(0, 1.5f, 6,   0, 1.5f, 0,   0, 1, 0);
 }
@@ -40,13 +48,20 @@ void initVersions() {
 	GMethod method1 = GMethod();
 	method1.creationTime = 1; method1.methodName = "method1";
 
+	GMethod method2 = GMethod();
+	method2.creationTime = 2; method2.methodName = "method2";
+
 	GClass class1 = GClass();
-	class1.childMethods.push_back(method1); class1.creationTime=1; class1.className = "class1";
+	class1.creationTime=1; class1.className = "class1";
+	class1.author_a = 3; class1.author_j = 1; class1.author_s = 2;
+	class1.childMethods.push_back(method1);
+	class1.childMethods.push_back(method2); 
 
 	GPackage package1 = GPackage(1,"package1");
 	package1.childClasses.push_back(class1);
 
 	GClass class2 = GClass(); class2.creationTime=2; class2.className="class2";
+	class2.author_a = 2; class2.author_j = 5; class2.author_s = 3;
 	package1.childClasses.push_back(class2);
 
 	version.childPackages.push_back(package1);
@@ -62,17 +77,17 @@ bool AnimateNextFrame(int desiredFrameRate)
 	static float lastTime = GetTickCount() * 0.001f;
 	static float elapsedTime = 0.0f;
 
-	float currentTime = GetTickCount() * 0.001f; // Get the time (milliseconds = seconds * .001)
-	float deltaTime = currentTime - lastTime; // Get the slice of time
+	float currentTime = GetTickCount() * 0.001f; // Get the g_time (milliseconds = seconds * .001)
+	float deltaTime = currentTime - lastTime; // Get the slice of g_time
 	float desiredFPS = 1.0f / desiredFrameRate; // Store 1 / desiredFrameRate
 
-	elapsedTime += deltaTime; // Add to the elapsed time
+	elapsedTime += deltaTime; // Add to the elapsed g_time
 	lastTime = currentTime; // Update lastTime
 
-	// Check if the time since we last checked is greater than our desiredFPS
+	// Check if the g_time since we last checked is greater than our desiredFPS
 	if( elapsedTime > desiredFPS )
 	{
-		elapsedTime -= desiredFPS; // Adjust our elapsed time
+		elapsedTime -= desiredFPS; // Adjust our elapsed g_time
 
 		// Return true, to animate the next frame of animation
 		return true;
@@ -105,8 +120,10 @@ WPARAM MainLoop()
 		{ 		
 			if(AnimateNextFrame(60))					// Make sure we only animate 60 FPS
 			{
-				time += (float)1/60.0;
+				g_time += (float)1/60.0;
+				commitNumber = g_time/commitTimeInterval;
 				g_Camera.Update();							// Update the camera information
+				
 				RenderScene();								// Render the scene every frame
 
 
@@ -126,46 +143,49 @@ WPARAM MainLoop()
 void drawSphere(float sphereRadius, float orbitRadius, float orbitSpeed)
 {
 	GLUquadricObj *pObj = gluNewQuadric();									// Push on a new matrix scope
-	glRotatef(orbitSpeed*time*60,0,1,0);	
+	glRotatef(orbitSpeed*g_time*60,0,1,0);	
 	glTranslatef(orbitRadius,0,0);
 	glPushMatrix();
-	glRotatef(60*time, 0, 1.0, 0);			// Rotate the sphere around itself to produce the spin
+	glRotatef(60*g_time, 0, 1.0, 0);			// Rotate the sphere around itself to produce the spin
 	gluSphere(pObj, sphereRadius, 8, 8);					// Draw the sphere with a radius of 0.1 (smallest planet)
 	glPopMatrix();
 }
-///////////////////////////////// RENDER SCENE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
-/////
-/////	This function renders the entire scene.
-/////
-///////////////////////////////// RENDER SCENE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
 
-void drawMethod(GMethod gm, int ct, int index) {
-	if (ct < gm.creationTime) return;
+void drawMethod(GMethod gm, int index) {
+	// checking whether the moon should be displayed
+	// displays when creationTime <= commitNumber < endTime
+	if ((commitNumber < gm.creationTime) && (commitNumber >= gm.endTime)) return;
 	glColor3f(1,1,1);
-	drawSphere(0.5,index+1,3);
+	//int randomAngle = rand()%360; // THIS DID NOT WORK BECUZ IT GENERATES RANDOM STUFF EVERY TIME
+	//float randomX = rand()%100 / 100.0;
+	//float randomZ = rand()%100/100.0;
+	glRotatef(index*60,1,0,0); // arbitrary angles of rotation.
+	drawSphere(MOON_RADIUS,index*MOON_DISTANCE,3); // Last parameter just for testing
 	glColor3f(1,0,0);
 }
 
-void drawClass(GClass gc,int ct,int index) {
-	if (ct<gc.creationTime) return;
-	drawSphere(1,index*5 + 5,1+index);
-	int index2 = 0;
+void drawClass(GClass gc,int index) {
+	if (commitNumber<gc.creationTime) return;
+	int a = gc.author_a; int j = gc.author_j; int s = gc.author_s;
+	float total = a+j+s;
+	glColor3f(a/total,j/total,s/total);
+	drawSphere(PLANET_RADIUS,index*PLANET_DISTANCE,1+index); // Last parameter is just for testing
+	int i= 1;
 	foreach(gmethod,gc.childMethods,vector<GMethod>) {
 		glPushMatrix();
-		drawMethod(*gmethod,ct,index2);
+		drawMethod(*gmethod,i);
 		glPopMatrix();
-		index2++;
+		i++;
 	}
 }
 
 void drawPackage(GPackage gp) {
-	float ct = time/commitTimeInterval;
-	if(ct < gp.creationTime) return;
-	drawSphere(1,0,0);
-	int index = 0;
+	if(commitNumber < gp.creationTime) return;
+	drawSphere(STAR_RADIUS,0,0);
+	int index = 1;
 	foreach(gclass,gp.childClasses,vector<GClass>) {
 		glPushMatrix();
-		drawClass(*gclass,ct,index);
+		drawClass(*gclass,index);
 		glPopMatrix();
 		index++;
 	}
