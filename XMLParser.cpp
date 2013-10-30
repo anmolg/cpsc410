@@ -56,7 +56,17 @@ int getNumber(string str, string keyword)
 //		cout<< "yoHO"<<result+100.0<<endl;
     return result;
 }
-
+/*return a method name given an XML line,
+or and empty string if that's a wrong line.
+*/
+string getMethodName(string str){
+	string result="";
+	if ((str.substr(0,15)=="			<METHODNAME>" )&&(str.substr(str.size()-13)=="</METHODNAME>" )){
+		result=str.substr(15,str.size()-28);
+		cout<<result<<endl;
+	}
+	return result;
+}
 /*get class name ANNNNND package name from FILEPATH
 return:
 	a 2-element vector of string: ["fileName","pakageName"]
@@ -153,6 +163,7 @@ bool XMLParser::parse(const char *filename, GVersion *version)
 	  }
 //		  cout<<"i'm "<< counter<<endl;
 	  vector<string> dummy=getGClassName(line);
+	  string ymmud =getMethodName(line);
 	  result =getNumber(line,"FILEID");
 //	  if( result !=-1)
 //	  cout<<result<<endl;
