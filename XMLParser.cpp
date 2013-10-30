@@ -79,7 +79,7 @@ int flagTrigger(string str, string keyword){
 		return -1;//triger finish element
 	return 0;//default
 }
-bool XMLParser::parse(const char *filename, std::vector<GVersion> *Versions) 
+bool XMLParser::parse(const char *filename, GVersion *version) 
 {
 	string line, targetString;
 	int result;
