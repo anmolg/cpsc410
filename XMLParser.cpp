@@ -4,9 +4,12 @@ using namespace std;
 
 
 
-/*helper function to prase a line of string into number, if the keyword matches
-return -1 if fail to prase
-str: input line of XML file
+/*helper function to prase a line of XML, if the keyword matches
+return:
+	target number OR
+	-1 if keyword doesn't match
+input:
+	str: input line of XML file
 */
 int getNumber(string str, string keyword)
 {
@@ -53,6 +56,52 @@ int getNumber(string str, string keyword)
 //		cout<< "yoHO"<<result+100.0<<endl;
     return result;
 }
+
+/*get class name ANNNNND package name from FILEPATH
+return:
+	a 2-element vector of string: ["fileName","pakageName"]
+	or if the line is not FILEPATH or not end with ".java": ["",""] 2 empty strings
+str: input line of XML file
+
+*/
+
+vector<string> getGClassName(string str){
+	vector<string> result(2,"");//default case
+	int i =str.size();
+	if (i>16){
+		int cNameLength=0,pNameLength=0;	//length of class name and package name
+		if ((str.substr(0,13)=="			<FILEPATH>" )&&(str.substr(str.size()-16)==".java</FILEPATH>" )){
+			int index =str.length() - 17;//search for class name
+			    while (i>index)
+				{
+					if (str[index]!='\\'){
+						index--;
+						cNameLength++;
+					}
+					else
+						break;
+					
+				}
+				result[0]=str.substr(index+1,cNameLength);
+				cout<<result[0]<<endl;
+				index =str.length() - 17 -cNameLength;//search for class name
+				index--;
+				while (i>index)
+				{
+					if (str[index]!='\\'){
+						index--;
+						pNameLength++;
+					}
+					else
+						break;
+				}
+				result[1]=str.substr(index+1,pNameLength);
+				cout<<result[1]<<endl;
+
+		};
+	}
+	return result;
+}
 /*triger a flag for isReading an element of XML file ,for example
 <FILE>
 	...
@@ -60,7 +109,6 @@ int getNumber(string str, string keyword)
 1:start 
 0:in progress
 -1:end
-
 */
 int flagTrigger(string str, string keyword){
 	size_t index = 0;
@@ -103,7 +151,8 @@ bool XMLParser::parse(const char *filename, GVersion *version)
 		  counter ++;
 		  cout<<"end file"<<endl;
 	  }
-		  cout<<"i'm "<< counter<<endl;
+//		  cout<<"i'm "<< counter<<endl;
+	  vector<string> dummy=getGClassName(line);
 	  result =getNumber(line,"FILEID");
 //	  if( result !=-1)
 //	  cout<<result<<endl;
