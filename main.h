@@ -4,6 +4,7 @@
 #define _CRT_SECURE_NO_DEPRECATE
 
 #include "Model.h"
+#include "GalaxyModel.h"
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -11,10 +12,13 @@
 #include <gl\gl.h>										// Header File For The OpenGL32 Library
 #include <gl\glu.h>										// Header File For The GLu32 Library
 
+
 #define SCREEN_WIDTH 800								// We want our screen width 800 pixels
 #define SCREEN_HEIGHT 600								// We want our screen height 600 pixels
 #define SCREEN_DEPTH 16									// We want 16 bits per pixel
 
+extern float g_time;
+extern float commitNumber;
 
 // This is our basic 3D point/vector class
 struct CVector3
