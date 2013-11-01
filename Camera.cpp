@@ -320,7 +320,7 @@ void CCamera::CheckForMovement()
 
 void CCamera::Update() 
 {
-
+	ShowCursor(FALSE);
 	// Initialize a variable for the cross product result
 	CVector3 vCross = Cross(m_vView - m_vPosition, m_vUpVector);
 
