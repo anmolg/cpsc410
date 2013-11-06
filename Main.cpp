@@ -150,7 +150,7 @@ void RenderScene()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear The Screen And The Depth Buffer
 	glLoadIdentity();									// Reset The matrix
 	g_Camera.Look();
-	glColor3f(1,0,0);
+	glColor3f(1,0.84,0);
 
 	foreach(package,(version.childPackages),vector<GPackage>) {
 		drawPackage(*package);
