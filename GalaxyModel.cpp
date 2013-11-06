@@ -16,6 +16,8 @@ UINT galaxy_texture[50];
 
 void loadgalaxytextures(){
 	CreateTexture(galaxy_texture[0],"Resources/textures/Sun.bmp");
+	CreateTexture(galaxy_texture[1],"Resources/textures/Moon.bmp");
+	CreateTexture(galaxy_texture[2],"Resources/textures/Planet.bmp");
 }
 
 void drawSphere(float sphereRadius, float orbitRadius, float orbitSpeed)
@@ -29,7 +31,7 @@ void drawSphere(float sphereRadius, float orbitRadius, float orbitSpeed)
 
   gluQuadricNormals(pObj, GLU_SMOOTH);
 	
-	glBindTexture(GL_TEXTURE_2D, galaxy_texture[0]);	
+	glBindTexture(GL_TEXTURE_2D, galaxy_texture[2]);	
 
 	glRotatef(orbitSpeed*g_time*60,0,1,0);	
 	glTranslatef(orbitRadius,0,0);
@@ -37,7 +39,7 @@ void drawSphere(float sphereRadius, float orbitRadius, float orbitSpeed)
 	glRotatef(60*g_time, 0, 1.0, 0);			// Rotate the sphere around itself to produce the spin
 
 
-	gluSphere(pObj, sphereRadius, 8, 8);					// Draw the sphere with a radius of 0.1 (smallest planet)
+	gluSphere(pObj, sphereRadius, 24, 24);					// Draw the sphere with a radius of 0.1 (smallest planet)
 	glPopMatrix();
 }
 
