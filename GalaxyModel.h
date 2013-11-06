@@ -26,4 +26,8 @@ void drawClass(GClass gc,int index);
 void drawPackage(GPackage gp);
 
 
+//hold galaxy textures
+void loadgalaxytextures();
+
+
 #endif

@@ -2,6 +2,9 @@
 #pragma comment(lib, "opengl32.lib")
 #pragma comment(lib, "glu32.lib")
 
+
+
+
 #include "main.h"										// This includes our header file
 #include "Camera.h"
 #include <stdlib.h>     /* srand, rand */
@@ -14,6 +17,8 @@ RECT  g_rRect;											// This holds the window dimensions
 HDC   g_hDC;											// General HDC - (handle to device context)
 HGLRC g_hRC;											// General OpenGL_DC - Our Rendering Context for OpenGL
 HINSTANCE g_hInstance;									// This holds the global hInstance for UnregisterClass() in DeInit()
+
+
 
 GVersion version = GVersion(1);
 float commitTimeInterval = 3.0;
@@ -37,6 +42,8 @@ void Init(HWND hWnd)
 	srand (time(NULL));
 						// Position        View		   Up Vector
 	g_Camera.PositionCamera(0, 1.5f, 6,   0, 1.5f, 0,   0, 1, 0);
+	loadgalaxytextures();
+	
 }
 
 void initVersions() {

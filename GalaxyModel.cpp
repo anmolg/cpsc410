@@ -10,13 +10,33 @@
 #define MOON_DISTANCE 1
 
 
+
+UINT galaxy_texture[50];
+
+
+void loadgalaxytextures(){
+	CreateTexture(galaxy_texture[0],"Resources/textures/Sun.bmp");
+}
+
 void drawSphere(float sphereRadius, float orbitRadius, float orbitSpeed)
 {
+	
+	glEnable(GL_TEXTURE_2D);
 	GLUquadricObj *pObj = gluNewQuadric();									// Push on a new matrix scope
+	 gluQuadricDrawStyle(pObj, GLU_FILL);
+	gluQuadricTexture(pObj, 1);						// This turns on texture coordinates for our Quadrics
+	 
+
+  gluQuadricNormals(pObj, GLU_SMOOTH);
+	
+	glBindTexture(GL_TEXTURE_2D, galaxy_texture[0]);	
+
 	glRotatef(orbitSpeed*g_time*60,0,1,0);	
 	glTranslatef(orbitRadius,0,0);
 	glPushMatrix();
 	glRotatef(60*g_time, 0, 1.0, 0);			// Rotate the sphere around itself to produce the spin
+
+
 	gluSphere(pObj, sphereRadius, 8, 8);					// Draw the sphere with a radius of 0.1 (smallest planet)
 	glPopMatrix();
 }

@@ -3,6 +3,7 @@
 
 #define _CRT_SECURE_NO_DEPRECATE
 
+
 #include "Model.h"
 #include "GalaxyModel.h"
 #include <windows.h>
@@ -86,6 +87,7 @@ WPARAM MainLoop();
 // This changes the screen to full screen mode
 void ChangeToFullScreen();
 
+
 // This is our own function that makes creating a window modular and easy
 HWND CreateMyWindow(LPSTR strWindowName, int width, int height, DWORD dwStyle, bool bFullScreen, HINSTANCE hInstance);
 
@@ -106,6 +108,10 @@ void RenderScene();
 
 // This frees all our memory in our program
 void DeInit();
+
+
+// This loads a texture into openGL from a file (IE, "bitmap.bmp")
+bool CreateTexture(GLuint &textureID, LPTSTR szFileName);
 
 void initVersions();
 #endif 
