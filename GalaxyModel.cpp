@@ -20,18 +20,23 @@ void loadgalaxytextures(){
 	CreateTexture(galaxy_texture[2],"Resources/textures/Planet.bmp");
 }
 
-void drawSphere(float sphereRadius, float orbitRadius, float orbitSpeed)
+void drawSphere(float sphereRadius, float orbitRadius, float orbitSpeed,string TYPE)
 {
 	
 	glEnable(GL_TEXTURE_2D);
 	GLUquadricObj *pObj = gluNewQuadric();									// Push on a new matrix scope
-	 gluQuadricDrawStyle(pObj, GLU_FILL);
+	gluQuadricDrawStyle(pObj, GLU_FILL);
 	gluQuadricTexture(pObj, 1);						// This turns on texture coordinates for our Quadrics
-	 
+	gluQuadricNormals(pObj, GLU_SMOOTH);
 
-  gluQuadricNormals(pObj, GLU_SMOOTH);
-	
-	glBindTexture(GL_TEXTURE_2D, galaxy_texture[2]);	
+
+	if (TYPE == "STAR"){
+	glBindTexture(GL_TEXTURE_2D, galaxy_texture[0]);	
+}
+else if (TYPE == "MOON"){
+	glBindTexture(GL_TEXTURE_2D, galaxy_texture[1]);}	
+else {
+	glBindTexture(GL_TEXTURE_2D, galaxy_texture[2]);}	
 
 	glRotatef(orbitSpeed*g_time*60,0,1,0);	
 	glTranslatef(orbitRadius,0,0);
@@ -53,7 +58,7 @@ void drawMethod(GMethod gm, int index) {
 	//float randomX = rand()%100 / 100.0;
 	//float randomZ = rand()%100/100.0;
 	glRotatef(index*60,1,0,0); // arbitrary angles of rotation.
-	drawSphere(MOON_RADIUS,index*MOON_DISTANCE,3); // Last parameter just for testing
+	drawSphere(MOON_RADIUS,index*MOON_DISTANCE,3,"MOON"); // Last parameter just for testing
 	glColor3f(1,0,0);
 }
 
@@ -62,7 +67,7 @@ void drawClass(GClass gc,int index) {
 	int a = gc.author_a; int j = gc.author_j; int s = gc.author_s;
 	float total = a+j+s;
 	glColor3f(a/total,j/total,s/total);
-	drawSphere(PLANET_RADIUS,index*PLANET_DISTANCE,1+index); // Last parameter is just for testing
+	drawSphere(PLANET_RADIUS,index*PLANET_DISTANCE,1+index,"PLANET"); // Last parameter is just for testing
 	int i= 1;
 	foreach(gmethod,gc.childMethods,vector<GMethod>) {
 		glPushMatrix();
@@ -74,7 +79,7 @@ void drawClass(GClass gc,int index) {
 
 void drawPackage(GPackage gp) {
 	if(commitNumber < gp.creationTime) return;
-	drawSphere(STAR_RADIUS,0,0);
+	drawSphere(STAR_RADIUS,0,0,"STAR");
 	int index = 1;
 	foreach(gclass,gp.childClasses,vector<GClass>) {
 		glPushMatrix();
