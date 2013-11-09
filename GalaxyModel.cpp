@@ -27,7 +27,6 @@ void drawSphere(float sphereRadius, float orbitRadius, float orbitSpeed, Celesti
 	gluQuadricTexture(pObj, 1);						// This turns on texture coordinates for our Quadrics
 	gluQuadricNormals(pObj, GLU_SMOOTH);
 
-
 	if (type == STAR){
 	glBindTexture(GL_TEXTURE_2D, galaxy_texture[0]);	
 }

@@ -8,3 +8,4 @@ ipch/
 *.suo
 *.vcxproj
 *.user
+*.db
