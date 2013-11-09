@@ -9,8 +9,6 @@
 #define MOON_RADIUS 0.5
 #define MOON_DISTANCE 1
 
-
-
 UINT galaxy_texture[50];
 
 
@@ -20,7 +18,7 @@ void loadgalaxytextures(){
 	CreateTexture(galaxy_texture[2],"Resources/textures/Planet.bmp");
 }
 
-void drawSphere(float sphereRadius, float orbitRadius, float orbitSpeed,string TYPE)
+void drawSphere(float sphereRadius, float orbitRadius, float orbitSpeed, CelestialType type)
 {
 	
 	glEnable(GL_TEXTURE_2D);
@@ -30,10 +28,10 @@ void drawSphere(float sphereRadius, float orbitRadius, float orbitSpeed,string T
 	gluQuadricNormals(pObj, GLU_SMOOTH);
 
 
-	if (TYPE == "STAR"){
+	if (type == STAR){
 	glBindTexture(GL_TEXTURE_2D, galaxy_texture[0]);	
 }
-else if (TYPE == "MOON"){
+else if (type == MOON){
 	glBindTexture(GL_TEXTURE_2D, galaxy_texture[1]);}	
 else {
 	glBindTexture(GL_TEXTURE_2D, galaxy_texture[2]);}	
@@ -42,7 +40,6 @@ else {
 	glTranslatef(orbitRadius,0,0);
 	glPushMatrix();
 	glRotatef(60*g_time, 0, 1.0, 0);			// Rotate the sphere around itself to produce the spin
-
 
 	gluSphere(pObj, sphereRadius, 24, 24);					// Draw the sphere with a radius of 0.1 (smallest planet)
 	glPopMatrix();
@@ -58,7 +55,7 @@ void drawMethod(GMethod gm, int index) {
 	//float randomX = rand()%100 / 100.0;
 	//float randomZ = rand()%100/100.0;
 	glRotatef(index*60,1,0,0); // arbitrary angles of rotation.
-	drawSphere(MOON_RADIUS,index*MOON_DISTANCE,3,"MOON"); // Last parameter just for testing
+	drawSphere(MOON_RADIUS,index*MOON_DISTANCE,3,MOON); // Last parameter just for testing
 	glColor3f(1,0,0);
 }
 
@@ -67,7 +64,7 @@ void drawClass(GClass gc,int index) {
 	int a = gc.author_a; int j = gc.author_j; int s = gc.author_s;
 	float total = a+j+s;
 	glColor3f(a/total,j/total,s/total);
-	drawSphere(PLANET_RADIUS,index*PLANET_DISTANCE,1+index,"PLANET"); // Last parameter is just for testing
+	drawSphere(PLANET_RADIUS,index*PLANET_DISTANCE,1+index,PLANET); // Last parameter is just for testing
 	int i= 1;
 	foreach(gmethod,gc.childMethods,vector<GMethod>) {
 		glPushMatrix();
@@ -79,7 +76,7 @@ void drawClass(GClass gc,int index) {
 
 void drawPackage(GPackage gp) {
 	if(commitNumber < gp.creationTime) return;
-	drawSphere(STAR_RADIUS,0,0,"STAR");
+	drawSphere(STAR_RADIUS,0,0,STAR);
 	int index = 1;
 	foreach(gclass,gp.childClasses,vector<GClass>) {
 		glPushMatrix();

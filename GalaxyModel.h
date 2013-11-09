@@ -16,6 +16,7 @@
 #define MOON_RADIUS 0.5
 #define MOON_DISTANCE 1
 
+enum CelestialType{STAR,PLANET,MOON};
 
 void drawSphere(float sphereRadius, float orbitRadius, float orbitSpeed);
 
@@ -28,6 +29,7 @@ void drawPackage(GPackage gp);
 
 //hold galaxy textures
 void loadgalaxytextures();
+
 
 
 #endif
