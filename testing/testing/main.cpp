@@ -7,9 +7,11 @@ using namespace std;
 
 int main() {
  int n;
-GVersion version = GVersion(1);
+GVersion version = GVersion(0);
  XMLParser xmlParser = XMLParser();
- xmlParser.parse("outputt",version);
+ xmlParser.parse("1",version);
+// xmlParser.parse("2",version);
+ //cout<< version.childPackages[0].packageName<<endl;
 
  cin >> n;
  return 0;

@@ -6,6 +6,22 @@ void preparse(GVersion &version);
 bool realParse(	const char *filename, GVersion &version);
 void postparse();//todo
 
+vector<GClass> tempClasses;
+vector<GMethod> tempMethods;
+
+bool XMLParser::parse(const char *filename, GVersion &version){
+	vector<GClass> tempClasses2;
+	vector<GMethod> tempMethods2;
+	tempClasses = tempClasses2;
+	tempMethods = tempMethods2;	//make sure we get a pair of new vectors every time
+	if (version.versionNumber != 0) preparse(version);
+
+	realParse(filename, version);
+	//postparse();//todo
+	return true;
+};
+
+
 /*helper function to parse a line of XML, if the keyword matches
 return:
 target number OR
@@ -51,14 +67,9 @@ int getNumber(string str, string keyword)
 			new_str=str.substr(index+2+keyword.size(),numLength+1);
 			//			cout<<new_str<<endl;  //search for keyword
 			result =atoi(new_str.c_str());
-			cout<<result<<endl;
+
 		}
 	}
-
-
-
-
-	//		cout<< "yoHO"<<result+100.0<<endl;
 	return result;
 }
 
@@ -146,13 +157,6 @@ int flagTrigger(string str, string keyword){
 }
 
 
-bool XMLParser::parse(const char *filename, GVersion &version){
-	//	preparse(version);
-
-	realParse(filename, version);
-	//postparse();//todo
-	return true;
-};
 
 
 bool realParse(const char *filename, GVersion &version) 
@@ -164,69 +168,78 @@ bool realParse(const char *filename, GVersion &version)
 	ifstream file (filename);
 	bool isCheckingFile = false;	// file lines trigger
 	bool isCheckingMethod = false;	// method lines trigger
-	vector<GPackage> newPackage;
-	vector<GClass> newClass;
-	vector<GMethod> newMethod;
+
 	if (file.is_open())
 	{
-		vector <GClass> gClass;
-		vector <GMethod> gMethod;
 		int iClass = 0;
-		int iClassCurrent = 0;
+		GClass tempC;
+		GMethod tempM;
 		while ( file.good() )
 		{
 			getline (file,line);
 			if (flagTrigger(line,"FILE")==1){
 				isCheckingFile =true;
-				GClass tempC= GClass();
-				tempC.creationTime =atoi(filename);	//dummy creation time update only if this value is less then the previous version(actually that will never happen)
+				tempC = GClass( atoi(filename));
 				tempC.alive = true;
-				gClass.push_back (tempC);
-
 			}
 			else if(flagTrigger(line,"FILE")==-1){
 				isCheckingFile =false;
-				//tempC->alive = false;
-				iClass++;
+				tempClasses.push_back (tempC);
 			}
 
 			else if (flagTrigger(line,"METHOD")==1){
 				isCheckingMethod =true;
-				GMethod tempM= GMethod();
-				gMethod.push_back(tempM);
+				tempM= GMethod( atoi(filename));
+				tempM.alive =true;
+
 			}
 			else if(flagTrigger(line,"METHOD")==-1){
 				isCheckingMethod =false;
+				tempMethods.push_back(tempM);
 			}
 
-
+			//-----------------------parse class stuff---------------------------
 			if(isCheckingFile){
 
 
-				if( getNumber(line, "FILEID") > 0){		//file ID
-					gClass[iClass].classID= getNumber(line, "FILEID"); // fileid
+				if( getNumber(line, "FILEID") >= 0){		//file ID
+					tempC.classID= getNumber(line, "FILEID"); // fileid
 				}
 				else if(getNumber(line, "FILELOC") > 0) {
-					gClass[iClass].size = getNumber(line,"FILELOC"); // size
+					tempC.size.push_back(getNumber(line,"FILELOC")); // size
 				}else if (getGClassName(line)[0] != ""){
-					gClass[iClass].className = getGClassName(line)[0]; // size
-					//todo create package
+					vector<string> path=getGClassName(line);
+					tempC.className=path[0];// the 0th elemet of the return value will be the class name
+					tempC.parentPackageName=path[1];// the first element will be package name				}
+				}
+			}
+			//---------------------parse method stuff------------------------------
+			if(isCheckingMethod){
+
+
+				if( getNumber(line, "METHODID") >= 0){		//method ID
+					tempM.methodID= getNumber(line, "METHODID"); // method id
 				}
 
+				else if (getMethodName(line) != ""){
+
+					tempM.methodName=getMethodName(line);// the method name
+				}
+				else if (getNumber(line, "DEFINITIONFILEID")>=0){
+					cout<<"yoho "<<getNumber(line, "DEFINITIONFILEID")<<endl;
+					tempM.parentClassID =getNumber(line, "DEFINITIONFILEID");
+				}
 			}
+		}
 
-			vector<string> dummy=getGClassName(line);
-			string ymmud =getMethodName(line);
-			//result =getNumber(line,"FILEID");
-			//	  if( result !=-1)
-			//	  cout<<result<<endl;
-			//	  		  cout<<line<<endl;
-			//		  cout<<getNumber(line, )<<endl;
-		};
+		//---------------------parse duplication stuff-------------------------
+		//todo
+	};
+	cout<<"hello "<<tempClasses[0].creationTime<<endl;
+	cout<<"hi "<<tempMethods[1].methodName<<endl;
+	file.close();
 
-		file.close();
 
-	}
 	return true;
 }
 
