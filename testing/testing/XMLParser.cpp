@@ -2,8 +2,8 @@
 //#include <boost/tokenizer.hpp>
 using namespace std;
 
-void preparse(GVersion *version);
-bool realParse(	const char *filename, GVersion *version);
+void preparse(GVersion &version);
+bool realParse(	const char *filename, GVersion &version);
 void postparse();//todo
 
 /*helper function to parse a line of XML, if the keyword matches
@@ -146,15 +146,16 @@ int flagTrigger(string str, string keyword){
 }
 
 
-bool XMLParser::parse(const char *filename, GVersion *version){
+bool XMLParser::parse(const char *filename, GVersion &version){
 	//	preparse(version);
+
 	realParse(filename, version);
 	//postparse();//todo
 	return true;
 };
 
 
-bool realParse(const char *filename, GVersion *version) 
+bool realParse(const char *filename, GVersion &version) 
 {
 	string line, targetString;
 	//int result;			// for testing

@@ -7,8 +7,7 @@ using namespace std;
 
 int main() {
  int n;
-GVersion *version;
- version= new GVersion(1);
+GVersion version = GVersion(1);
  XMLParser xmlParser = XMLParser();
  xmlParser.parse("outputt",version);
 
