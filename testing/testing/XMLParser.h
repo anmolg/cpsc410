@@ -18,7 +18,7 @@ public:
 
 
 	// parse a file and write the output in the vectors
-	bool parse(	const char *filename, GVersion &version);
+	bool parse( int filename, GVersion &version);
 
 
 };

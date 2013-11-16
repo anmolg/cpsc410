@@ -1,21 +1,20 @@
 #include "XMLParser.h"
-//#include <boost/tokenizer.hpp>
 using namespace std;
 
 void preparse(GVersion &version);
-bool realParse(	const char *filename, GVersion &version);
+bool realParse(	int filename, GVersion &version);
 void postparse();//todo
-
+string toString(double number);
 vector<GClass> tempClasses;
 vector<GMethod> tempMethods;
 
-bool XMLParser::parse(const char *filename, GVersion &version){
+bool XMLParser::parse(int filename, GVersion &version){
 	vector<GClass> tempClasses2;
 	vector<GMethod> tempMethods2;
 	tempClasses = tempClasses2;
 	tempMethods = tempMethods2;	//make sure we get a pair of new vectors every time
 	if (version.versionNumber != 0) preparse(version);
-
+	string s = toString(filename);
 	realParse(filename, version);
 	//postparse();//todo
 	return true;
@@ -159,13 +158,14 @@ int flagTrigger(string str, string keyword){
 
 
 
-bool realParse(const char *filename, GVersion &version) 
+bool realParse(int filename, GVersion &version) 
 {
-	string line, targetString;
-	//int result;			// for testing
-	//int counter=0; 
+	string line, targetString, s;
+	s= toString(filename);
+	cout <<s.c_str()<<endl;
 	int versionNumber;			// file name
-	ifstream file (filename);
+	ifstream file (s.c_str());
+
 	bool isCheckingFile = false;	// file lines trigger
 	bool isCheckingMethod = false;	// method lines trigger
 
@@ -179,7 +179,7 @@ bool realParse(const char *filename, GVersion &version)
 			getline (file,line);
 			if (flagTrigger(line,"FILE")==1){
 				isCheckingFile =true;
-				tempC = GClass( atoi(filename));
+				tempC = GClass( filename);
 				tempC.alive = true;
 			}
 			else if(flagTrigger(line,"FILE")==-1){
@@ -189,7 +189,7 @@ bool realParse(const char *filename, GVersion &version)
 
 			else if (flagTrigger(line,"METHOD")==1){
 				isCheckingMethod =true;
-				tempM= GMethod( atoi(filename));
+				tempM= GMethod( filename);
 				tempM.alive =true;
 
 			}
@@ -265,4 +265,11 @@ void preparse(GVersion &v){
 	for (int i= 0; i<v.childPackages.size();i++){
 		preparsePackage(v.childPackages[i]);
 	}
+}
+//homemake toString, turn a number to string
+string toString(double number)
+{
+   stringstream ss;//create a stringstream
+   ss << number;//add number to the stream
+   return ss.str();//return a string with the contents of the stream
 }
