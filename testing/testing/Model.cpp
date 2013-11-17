@@ -2,24 +2,24 @@
 
 using namespace std;
 
-GPackage GVersion::searchPackage(string pn) {
-	foreach(package,childPackages,vector<GPackage>) {
-		if (package->packageName == pn) return *package;
+int GVersion::searchPackage(string pn) {
+	for(int i = 0; i < childPackages.size(); i++) {
+		if (childPackages[i].packageName == pn) return i;
 	}
-	return GPackage(-1);
+	return -1;
 }
 
-GClass GPackage::searchClass(string cn) {
-	foreach(gclass,childClasses,vector<GClass>) {
-		if (gclass->className == cn) return *gclass;
+int GPackage::searchClass(string cn) {
+	for(int i = 0; i < childClasses.size(); i++) {
+		if (childClasses[i].className == cn) return i;
 	}
-	return GClass(-1);
+	return -1;
 }
 
-GMethod GClass::searchMethod(string mn) {
-	foreach(method,childMethods,vector<GMethod>) {
-		if (method->methodName == mn) return *method;
+int GClass::searchMethod(string mn) {
+	for(int i = 0; i < childMethods.size(); i++) {
+		if (childMethods[i].methodName == mn) return i;
 	}
-	return GMethod(-1);
+	return -1;
 }
 
