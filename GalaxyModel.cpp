@@ -5,7 +5,7 @@
 #include <math.h>
 
 #define STAR_RADIUS 2
-#define PLANET_RADIUS 1
+#define PLANET_RADIUS 0.5
 #define PLANET_DISTANCE 10
 #define MOON_RADIUS 0.5
 #define MOON_DISTANCE 0.5
@@ -64,9 +64,10 @@ void drawSphere(float sphereRadius, float orbitRadius, float orbitSpeed, Celesti
 	glPopMatrix();
 }
 
-void drawMethod(GMethod gm, int index) {
+void drawMethod(GMethod gm, int index,float p_radius) {
 	// checking whether the moon should be displayed
 	// displays when creationTime <= commitNumber < endTime
+
 	if (commitNumber < gm.creationTime) return;
 	if (commitNumber >= gm.endTime) return;
 	glColor3f(1,1,1);
@@ -75,7 +76,7 @@ void drawMethod(GMethod gm, int index) {
 	//float randomZ = rand()%100/100.0;
 	glRotatef(index*60,1,0,0); // arbitrary angles of rotation.
 	drawSphere(	MOON_RADIUS,
-				1 + index*MOON_DISTANCE,
+				p_radius + index*MOON_DISTANCE,
 				MOON_BASE_ORBIT_SPEED/sqrt((double) index),
 				MOON); // Last parameter just for testing
 }
@@ -83,14 +84,16 @@ void drawMethod(GMethod gm, int index) {
 void drawClass(GClass gc,int index) {
 	if (commitNumber<gc.creationTime) return;
 	glColor3f(0,1,0); // TODO : set colour corresponding to author commits.
-	drawSphere( PLANET_RADIUS,
-				index*PLANET_DISTANCE,
+	int sizeIndex = (int) min(commitNumber-1,gc.size.size()-1);
+	float radius = PLANET_RADIUS + gc.size[sizeIndex]/100;
+	drawSphere( radius,
+				(radius/2) + index*PLANET_DISTANCE,
 				PLANET_BASE_ORBIT_SPEED/sqrt((double) index),
 				PLANET); // Last parameter is just for testing
 	int i= 1;
 	foreach(gmethod,gc.childMethods,vector<GMethod>) {
 		glPushMatrix();
-		drawMethod(*gmethod,i);
+		drawMethod(*gmethod,i,radius);
 		glPopMatrix();
 		i++;
 	}
