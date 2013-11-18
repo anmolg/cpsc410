@@ -4,6 +4,7 @@ using namespace std;
 void preparse(GVersion &version);
 bool realParse(	int filename);
 void update(GVersion &version, int versionNumber);
+void postparse(GVersion &version, int versionNumber);
 string toString(double number);
 vector<GClass> tempClasses;
 vector<GMethod> tempMethods;
@@ -17,6 +18,7 @@ bool XMLParser::parse(int filename, GVersion &version){
 	string s = toString(filename);
 	realParse(filename);
 	update(version, filename);
+	postparse(version, filename);
 	return true;
 };
 
@@ -225,11 +227,21 @@ bool realParse(int filename) //filename is the version number
 					tempM.methodName=getMethodName(line);// the method name
 				}
 				else if (getNumber(line, "DEFINITIONFILEID")>=0){
-					cout<<"yoho "<<getNumber(line, "DEFINITIONFILEID")<<endl;
+	//				cout<<"yoho "<<getNumber(line, "DEFINITIONFILEID")<<endl;
 					tempM.parentClassID =getNumber(line, "DEFINITIONFILEID");
 				}
 			}
 		}
+	//insert method stuff to class array
+	foreach(gmethod,tempMethods,vector<GMethod>){
+		for(int i=0; i<tempClasses.size();i++){
+			if(tempClasses[i].classID==gmethod->parentClassID){
+				gmethod->alive=true;
+				tempClasses[i].childMethods.push_back(*gmethod);
+				break;
+			}
+		}
+	}
 
 		//---------------------parse duplication stuff-------------------------
 		//todo
@@ -253,10 +265,10 @@ void preparseClass(GClass &c){
 	}
 }
 
-void preparsePackage(GPackage &g){
-	g.alive =false;
-	for (int i= 0; i<g.childClasses.size();i++){
-		preparseClass(g.childClasses[i]);
+void preparsePackage(GPackage &p){
+	p.alive =false;
+	for (int i= 0; i<p.childClasses.size();i++){
+		preparseClass(p.childClasses[i]);
 	}
 }
 
@@ -267,6 +279,8 @@ void preparse(GVersion &v){
 }
 
 void update(GVersion &v, int versionNumber){
+
+//update class data to version
 	foreach (gclass, tempClasses, vector<GClass>){
 		int indexP = v.searchPackage(gclass->parentPackageName);	//index of package
 		int indexC = 0;												//index of class, default to 0 for case package don't exist
@@ -277,6 +291,18 @@ void update(GVersion &v, int versionNumber){
 			if (indexC >=0){
 				v.childPackages[indexP].childClasses[indexC].classID=gclass->classID;
 				v.childPackages[indexP].childClasses[indexC].size.push_back(gclass->size[0]);// add the new snap shot of size
+				foreach(gmethod,gclass->childMethods,vector<GMethod>){
+					for(int i=0;i<v.childPackages[indexP].childClasses[indexC].childMethods.size();i++){
+						if (v.childPackages[indexP].childClasses[indexC].childMethods[i].methodName==gmethod->methodName){
+							v.childPackages[indexP].childClasses[indexC].childMethods[i].methodID=gmethod->methodID;//method exist, update
+//todo, handle the duplication id							
+						}
+						else{
+							gmethod->creationTime=versionNumber;
+							v.childPackages[indexP].childClasses[indexC].childMethods.push_back(*gmethod);// new method, add it
+						}
+					}
+				}
 				v.childPackages[indexP].childClasses[indexC].alive=true;//this class a alive again
 			}
 		//class doesn't exist
@@ -305,6 +331,33 @@ void update(GVersion &v, int versionNumber){
 		}
 	}
 }
+void postparseMethod(GMethod &m, int versionNumber){
+	if(m.alive== false)
+		if(m.endTime>versionNumber)
+			m.endTime=versionNumber;	//a method passed away at this time, amen!
+}
+
+void postparseClass(GClass &c, int versionNumber){
+	if(c.alive ==false)
+		if(c.endTime>versionNumber)
+			c.endTime=versionNumber;	//a class passed away at this time, amen!
+	for (int i= 0; i<c.childMethods.size();i++)
+		postparseMethod(c.childMethods[i],versionNumber);
+	
+}
+
+void postparsePackage(GPackage &p, int versionNumber){
+	if(p.alive ==false)
+		if(p.endTime>versionNumber)
+			p.endTime=versionNumber;	//a package passed away at this time, amen!
+	for (int i= 0; i<p.childClasses.size();i++)
+		postparseClass(p.childClasses[i],versionNumber);
+}
+
+void postparse(GVersion &v, int versionNumber){
+	for (int i= 0; i<v.childPackages.size();i++)
+		postparsePackage(v.childPackages[i], versionNumber);
+};
 //homemake toString, turn a number to string
 string toString(double number)
 {
