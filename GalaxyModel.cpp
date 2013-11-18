@@ -2,22 +2,34 @@
 #pragma comment(lib, "glu32.lib")
 
 #include "GalaxyModel.h"
+#include <math.h>
 
 #define STAR_RADIUS 2
 #define PLANET_RADIUS 1
-#define PLANET_DISTANCE 5
+#define PLANET_DISTANCE 10
 #define MOON_RADIUS 0.5
-#define MOON_DISTANCE 1
-#define STAR_DISTANCE 30
+#define MOON_DISTANCE 0.5
+#define STAR_DISTANCE 50
+#define MOON_BASE_ORBIT_SPEED 3.0 
+#define PLANET_BASE_ORBIT_SPEED 1.0 
 
 
 UINT galaxy_texture[50];
 
-void setStarLocation(int index) {
-	if (index ==0 ) return;
-	if (index == 1) { glTranslatef(STAR_DISTANCE,0,0); return;}
-	if (index == 2) { glTranslatef(0,STAR_DISTANCE,0); return;}
-	else { glTranslatef(0,0,STAR_DISTANCE); return;}
+void initStar(int index) {
+	switch (index) {
+	case 0:
+		return;
+	case 1:
+		glTranslatef(STAR_DISTANCE,0,0); 
+		return;
+	case 2: 
+		glTranslatef(0,STAR_DISTANCE,0);
+		return;
+	case 3: 
+		glTranslatef(0,0,STAR_DISTANCE); 
+		return;
+	}
 }
 
 void loadgalaxytextures(){
@@ -62,14 +74,19 @@ void drawMethod(GMethod gm, int index) {
 	//float randomX = rand()%100 / 100.0;
 	//float randomZ = rand()%100/100.0;
 	glRotatef(index*60,1,0,0); // arbitrary angles of rotation.
-	drawSphere(MOON_RADIUS,index*MOON_DISTANCE,3,MOON); // Last parameter just for testing
-	glColor3f(1,0,0);
+	drawSphere(	MOON_RADIUS,
+				1 + index*MOON_DISTANCE,
+				MOON_BASE_ORBIT_SPEED/sqrt((double) index),
+				MOON); // Last parameter just for testing
 }
 
 void drawClass(GClass gc,int index) {
 	if (commitNumber<gc.creationTime) return;
 	glColor3f(0,1,0); // TODO : set colour corresponding to author commits.
-	drawSphere(PLANET_RADIUS,index*PLANET_DISTANCE,1+index,PLANET); // Last parameter is just for testing
+	drawSphere( PLANET_RADIUS,
+				index*PLANET_DISTANCE,
+				PLANET_BASE_ORBIT_SPEED/sqrt((double) index),
+				PLANET); // Last parameter is just for testing
 	int i= 1;
 	foreach(gmethod,gc.childMethods,vector<GMethod>) {
 		glPushMatrix();
@@ -81,7 +98,8 @@ void drawClass(GClass gc,int index) {
 
 void drawPackage(GPackage gp,int p_index) {
 	if(commitNumber < gp.creationTime) return;
-	setStarLocation(p_index);
+	initStar(p_index);				// set star location
+	glColor3f(1,0.84,0);
 	drawSphere(STAR_RADIUS,0,0,STAR);
 	int index = 1;
 	foreach(gclass,gp.childClasses,vector<GClass>) {

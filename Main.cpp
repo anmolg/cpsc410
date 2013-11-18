@@ -141,7 +141,6 @@ void RenderScene()
 	int pIndex = 0;
 	foreach(package,(version.childPackages),vector<GPackage>) {
 		glPushMatrix();
-		glColor3f(1,0.84,0);
 		drawPackage(*package,pIndex);
 		glPopMatrix();
 		pIndex++;

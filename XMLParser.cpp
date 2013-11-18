@@ -345,7 +345,10 @@ void postparseMethod(GMethod &m, int versionNumber){
 void postparseClass(GClass &c, int versionNumber){
 	if(c.alive ==false)
 		if(c.endTime>versionNumber)
-			c.endTime=versionNumber;	//a class passed away at this time, amen!
+		{
+			c.size.push_back(0);
+			c.endTime = versionNumber;	//a class passed away at this time, amen!
+		}
 	for (int i= 0; i<c.childMethods.size();i++)
 		postparseMethod(c.childMethods[i],versionNumber);
 	
