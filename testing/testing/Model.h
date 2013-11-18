@@ -18,6 +18,8 @@ struct Authors {
 	int author_j;							// Jimmy
 };
 
+enum {PACKAGE,CLASS,METHOD};
+
 ///////////////////////////////////////////////////////////////////////////
 
 // helper function for iterating over std::vector<>
@@ -45,6 +47,8 @@ public:
 	// return the index of package,
 	//or -1 if we can't find it
 	int searchPackage(string pn);
+	
+	void printVersion(int stop); // for visualization and debugging purposes, prints out the structure to console.
 
 	int versionNumber;
 	vector<GPackage> childPackages;

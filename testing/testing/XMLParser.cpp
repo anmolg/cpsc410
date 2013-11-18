@@ -7,14 +7,16 @@ void update(GVersion &version, int versionNumber);
 string toString(double number);
 vector<GClass> tempClasses;
 vector<GMethod> tempMethods;
+vector<GPackage> tempPackages;
 
 bool XMLParser::parse(int filename, GVersion &version){
-	vector<GClass> tempClasses2;
-	vector<GMethod> tempMethods2;
-	tempClasses = tempClasses2;
-	tempMethods = tempMethods2;	//make sure we get a pair of new vectors every time
+	// clear the temp vectors at the start of parsing.
+	tempClasses.clear();
+	tempMethods.clear();
+	tempPackages.clear();
+
+	// if version is not empty, do parsing preparations.
 	if (version.versionNumber != 0) preparse(version);
-	string s = toString(filename);
 	realParse(filename);
 	update(version, filename);
 	return true;
@@ -54,7 +56,6 @@ int getNumber(string str, string keyword)
 			//			cout << str.size() << endl;
 			while (numLength+index+2*keyword.size()+5 < str.size())
 			{
-
 
 				if (str[index+2+keyword.size()+numLength]!='<'){
 					numLength++;
@@ -270,14 +271,14 @@ void update(GVersion &v, int versionNumber){
 	foreach (gclass, tempClasses, vector<GClass>){
 		int indexP = v.searchPackage(gclass->parentPackageName);	//index of package
 		int indexC = 0;												//index of class, default to 0 for case package don't exist
-//package exists
+		//if package exists, then we update the class if it exists, and create new class if it does not.
 		if (indexP>=0){			
 			indexC = v.childPackages[indexP].searchClass(gclass->className);
-		//class exists
+		//if class exists
 			if (indexC >=0){
-				v.childPackages[indexP].childClasses[indexC].classID=gclass->classID;
+				v.childPackages[indexP].childClasses[indexC].classID = gclass->classID;
 				v.childPackages[indexP].childClasses[indexC].size.push_back(gclass->size[0]);// add the new snap shot of size
-				v.childPackages[indexP].childClasses[indexC].alive=true;//this class a alive again
+				v.childPackages[indexP].childClasses[indexC].alive = true;//this class is alive again
 			}
 		//class doesn't exist
 			else {					
@@ -290,7 +291,8 @@ void update(GVersion &v, int versionNumber){
 			}
 			v.childPackages[indexP].alive=true;						// this package is now alive
 		}
-//package don't exist, of course the class can't exist
+		
+		//package don't exist, of course the class can't exist
 		else{					
 			v.childPackages.push_back(GPackage(versionNumber, gclass->parentPackageName));
 			for(int i=0; i<versionNumber-1; i++){				//this class' size for all previous versions are 0
@@ -300,12 +302,12 @@ void update(GVersion &v, int versionNumber){
 			gclass->creationTime=versionNumber;
 			int j=v.childPackages.size()-1;
 			v.childPackages[j].childClasses.push_back(*gclass);//add the new class to the package
-			v.childPackages[j].alive=true;
-			v.childPackages[j].creationTime=versionNumber;
+			v.childPackages[j].alive = true;
+			v.childPackages[j].creationTime = versionNumber;
 		}
 	}
 }
-//homemake toString, turn a number to string
+//convert a number to string
 string toString(double number)
 {
    stringstream ss;//create a stringstream
