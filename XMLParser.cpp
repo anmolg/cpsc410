@@ -292,15 +292,17 @@ void update(GVersion &v, int versionNumber){
 				v.childPackages[indexP].childClasses[indexC].size.push_back(gclass->size[0]);// add the new snap shot of size
 				v.childPackages[indexP].childClasses[indexC].alive = true;//this class is alive again
 				foreach(gmethod,gclass->childMethods,vector<GMethod>){
+					bool updated =false;
 					for(int i=0;i<v.childPackages[indexP].childClasses[indexC].childMethods.size();i++){
 						if (v.childPackages[indexP].childClasses[indexC].childMethods[i].methodName == gmethod->methodName){
 							v.childPackages[indexP].childClasses[indexC].childMethods[i].methodID = gmethod->methodID;//method exist, update
 //todo, handle the duplication id							
+							updated = true;
 						}
-						else{
-							gmethod->creationTime = versionNumber;
-							v.childPackages[indexP].childClasses[indexC].childMethods.push_back(*gmethod);// new method, add it
-						}
+					}
+					if (!updated){
+						gmethod->creationTime = versionNumber;
+						v.childPackages[indexP].childClasses[indexC].childMethods.push_back(*gmethod);// new method, add it
 					}
 				}
 				v.childPackages[indexP].childClasses[indexC].alive = true;//this class a alive again

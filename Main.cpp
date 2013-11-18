@@ -48,10 +48,13 @@ void Init(HWND hWnd)
 
 void initVersions() {
 	// Testing data
-	XMLParser xmlParser = XMLParser();
-	xmlParser.parse(1,version);
-	_RPT1( 0, "initVersions : %i\n", version.childPackages.size());
+		XMLParser xmlParser = XMLParser();
+	for (int i=1;i<31;i++) {
+		xmlParser.parse(i,version);
+		_RPT1( 0, "initVersions : %i\n", i);
+	}
 }
+
 /////////////////////////////// ANIMATE NEXT FRAME \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
 /////
 /////	This function clamps a specified frame rate for consistency
