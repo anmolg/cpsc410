@@ -3,7 +3,7 @@
 
 #define _CRT_SECURE_NO_DEPRECATE
 
-
+#include "XMLParser.h"
 #include "Model.h"
 #include "GalaxyModel.h"
 #include <windows.h>

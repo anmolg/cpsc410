@@ -158,9 +158,6 @@ int flagTrigger(string str, string keyword){
 	return 0;//default
 }
 
-
-
-
 bool realParse(int filename) //filename is the version number
 {
 	string line, targetString, s;
@@ -295,12 +292,12 @@ void update(GVersion &v, int versionNumber){
 				v.childPackages[indexP].childClasses[indexC].alive = true;//this class is alive again
 				foreach(gmethod,gclass->childMethods,vector<GMethod>){
 					for(int i=0;i<v.childPackages[indexP].childClasses[indexC].childMethods.size();i++){
-						if (v.childPackages[indexP].childClasses[indexC].childMethods[i].methodName==gmethod->methodName){
-							v.childPackages[indexP].childClasses[indexC].childMethods[i].methodID=gmethod->methodID;//method exist, update
+						if (v.childPackages[indexP].childClasses[indexC].childMethods[i].methodName == gmethod->methodName){
+							v.childPackages[indexP].childClasses[indexC].childMethods[i].methodID = gmethod->methodID;//method exist, update
 //todo, handle the duplication id							
 						}
 						else{
-							gmethod->creationTime=versionNumber;
+							gmethod->creationTime = versionNumber;
 							v.childPackages[indexP].childClasses[indexC].childMethods.push_back(*gmethod);// new method, add it
 						}
 					}
@@ -313,10 +310,10 @@ void update(GVersion &v, int versionNumber){
 					gclass->size.push_back(0);						//preserve the last slot for the real size
 				}
 				gclass->size.push_back(gclass->size[0]);			//set the real size for this version
-				gclass->creationTime=versionNumber;					
+				gclass->creationTime = versionNumber;					
 				v.childPackages[indexP].childClasses.push_back(*gclass);//add the new class to the package
 			}
-			v.childPackages[indexP].alive=true;						// this package is now alive
+			v.childPackages[indexP].alive = true;						// this package is now alive
 		}
 		
 		//package don't exist, of course the class can't exist

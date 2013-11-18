@@ -20,7 +20,7 @@ HINSTANCE g_hInstance;									// This holds the global hInstance for Unregister
 
 
 
-GVersion version = GVersion(1);
+GVersion version = GVersion(0);
 float commitTimeInterval = 3.0;
 float g_time = 0.0;
 float commitNumber;
@@ -48,26 +48,9 @@ void Init(HWND hWnd)
 
 void initVersions() {
 	// Testing data
-	GMethod method1 = GMethod(); 
-	method1.creationTime = 1; method1.endTime = 3; method1.methodName = "method1";
-
-	GMethod method2 = GMethod();
-	method2.creationTime = 2; method2.endTime = 6; method2.methodName = "method2";
-
-	GClass class1 = GClass();
-	class1.creationTime=1; class1.className = "class1";
-	class1.author_a = 3; class1.author_j = 1; class1.author_s = 2;
-	class1.childMethods.push_back(method1);
-	class1.childMethods.push_back(method2); 
-
-	GPackage package1 = GPackage(1,"package1");
-	package1.childClasses.push_back(class1);
-
-	GClass class2 = GClass(); class2.creationTime=2; class2.className="class2";
-	class2.author_a = 2; class2.author_j = 5; class2.author_s = 3;
-	package1.childClasses.push_back(class2);
-
-	version.childPackages.push_back(package1);
+	XMLParser xmlParser = XMLParser();
+	xmlParser.parse(1,version);
+	_RPT1( 0, "initVersions : %i\n", version.childPackages.size());
 }
 /////////////////////////////// ANIMATE NEXT FRAME \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
 /////

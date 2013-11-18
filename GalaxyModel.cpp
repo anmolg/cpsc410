@@ -60,9 +60,7 @@ void drawMethod(GMethod gm, int index) {
 
 void drawClass(GClass gc,int index) {
 	if (commitNumber<gc.creationTime) return;
-	int a = gc.author_a; int j = gc.author_j; int s = gc.author_s;
-	float total = a+j+s;
-	glColor3f(a/total,j/total,s/total);
+	glColor3f(0,1,0); // TODO : set colour corresponding to author commits.
 	drawSphere(PLANET_RADIUS,index*PLANET_DISTANCE,1+index,PLANET); // Last parameter is just for testing
 	int i= 1;
 	foreach(gmethod,gc.childMethods,vector<GMethod>) {
