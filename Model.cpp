@@ -2,8 +2,6 @@
 
 using namespace std;
 
-
-
 string printSpaces(int n){
 	if (n==0) return " ";
 	return " " + printSpaces(n-1);
@@ -19,7 +17,7 @@ int GVersion::searchPackage(string pn) {
 void printMethods(GClass gc) {
 	int size = gc.childMethods.size();
 	for (int j=0; j < size ; j++) {
-		cout << "         " << gc.childMethods[j].methodName << endl;
+		cout << "         " << gc.childMethods[j].methodName << " id "<< gc.childMethods[j].id <<endl;
 	}
 }
 
@@ -56,4 +54,12 @@ int GClass::searchMethod(string mn) {
 	}
 	return -1;
 }
+
+int GMethod::newID(){
+	static int id = 0; 
+	id++;
+	cout << "newID: "<< id << endl;
+	return id;
+}
+
 

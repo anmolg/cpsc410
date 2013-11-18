@@ -232,6 +232,7 @@ bool realParse(int filename) //filename is the version number
 		}
 	//insert method stuff to class array
 	foreach(gmethod,tempMethods,vector<GMethod>){
+		gmethod->id = gmethod->newID();
 		for(int i=0; i<tempClasses.size();i++){
 			if(tempClasses[i].classID==gmethod->parentClassID){
 				gmethod->alive=true;
@@ -248,7 +249,7 @@ bool realParse(int filename) //filename is the version number
 	//cout<<"hi "<<tempMethods[1].methodName<<endl;
 	file.close();
 
-	
+
 	return true;
 }
 
@@ -301,17 +302,22 @@ void update(GVersion &v, int versionNumber){
 					}
 					if (!updated){
 						gmethod->creationTime = versionNumber;
+						gmethod->id = gmethod->newID();
 						v.childPackages[indexP].childClasses[indexC].childMethods.push_back(*gmethod);// new method, add it
 					}
-					
 				}
 				v.childPackages[indexP].childClasses[indexC].alive = true;//this class a alive again
 			}
 		//class doesn't exist
 			else {					
-				for(int i=0; i<versionNumber-1; i++){				//this class' size for all previous versions are 0
+				for(int i=0; i<versionNumber; i++){				//this class' size for all previous versions are 0
 					gclass->size.push_back(0);						//preserve the last slot for the real size
 				}
+				//// add method info
+				//foreach(gmethod,gclass->childMethods,vector<GMethod>) {
+				//	gmethod->creationTime = versionNumber;
+				//	gmethod->id = gmethod->newID();
+				//}
 				gclass->size.push_back(gclass->size[0]);			//set the real size for this version
 				gclass->creationTime = versionNumber;					
 				v.childPackages[indexP].childClasses.push_back(*gclass);//add the new class to the package
@@ -346,7 +352,10 @@ void postparseMethod(GMethod &m, int versionNumber){
 void postparseClass(GClass &c, int versionNumber){
 	if(c.alive ==false)
 		if(c.endTime>versionNumber)
-			c.endTime=versionNumber;	//a class passed away at this time, amen!
+		{
+			c.size.push_back(0);
+			c.endTime = versionNumber;	//a class passed away at this time, amen!
+		}
 	for (int i= 0; i<c.childMethods.size();i++)
 		postparseMethod(c.childMethods[i],versionNumber);
 	

@@ -84,7 +84,7 @@ void drawMethod(GMethod gm, int index,float p_radius) {
 void drawClass(GClass gc,int index) {
 	if (commitNumber<gc.creationTime) return;
 	glColor3f(0,1,0); // TODO : set colour corresponding to author commits.
-	int sizeIndex = (int) min(commitNumber-1,gc.size.size()-1);
+	int sizeIndex = (int) min(commitNumber,gc.size.size()-1);
 	float radius = PLANET_RADIUS + gc.size[sizeIndex]/100;
 	drawSphere( radius,
 				(radius/2) + index*PLANET_DISTANCE,
