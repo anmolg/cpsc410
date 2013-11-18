@@ -18,7 +18,6 @@ int GVersion::searchPackage(string pn) {
 
 void printMethods(GClass gc) {
 	int size = gc.childMethods.size();
-	cout << "(CODE-YUGIOH) size of methods is : " << size << endl;
 	for (int j=0; j < size ; j++) {
 		cout << "         " << gc.childMethods[j].methodName << endl;
 	}
