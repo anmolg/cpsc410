@@ -3,7 +3,7 @@
 #include "Camera.h"
 
 // This is how fast our camera moves (Sped up a bit due to normalizing our vectors)
-#define kSpeed	0.1f									
+#define kSpeed	1.0f									
 /////////////////////////////////////// CROSS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
 /////
 /////	This returns a perpendicular vector from 2 given vectors by taking the cross product.

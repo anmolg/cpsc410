@@ -8,9 +8,17 @@
 #define PLANET_DISTANCE 5
 #define MOON_RADIUS 0.5
 #define MOON_DISTANCE 1
+#define STAR_DISTANCE 30
+
 
 UINT galaxy_texture[50];
 
+void setStarLocation(int index) {
+	if (index ==0 ) return;
+	if (index == 1) { glTranslatef(STAR_DISTANCE,0,0); return;}
+	if (index == 2) { glTranslatef(0,STAR_DISTANCE,0); return;}
+	else { glTranslatef(0,0,STAR_DISTANCE); return;}
+}
 
 void loadgalaxytextures(){
 	CreateTexture(galaxy_texture[0],"Resources/textures/Sun.bmp");
@@ -20,7 +28,7 @@ void loadgalaxytextures(){
 
 void drawSphere(float sphereRadius, float orbitRadius, float orbitSpeed, CelestialType type)
 {
-	
+
 	glEnable(GL_TEXTURE_2D);
 	GLUquadricObj *pObj = gluNewQuadric();									// Push on a new matrix scope
 	gluQuadricDrawStyle(pObj, GLU_FILL);
@@ -28,12 +36,12 @@ void drawSphere(float sphereRadius, float orbitRadius, float orbitSpeed, Celesti
 	gluQuadricNormals(pObj, GLU_SMOOTH);
 
 	if (type == STAR){
-	glBindTexture(GL_TEXTURE_2D, galaxy_texture[0]);	
-}
-else if (type == MOON){
-	glBindTexture(GL_TEXTURE_2D, galaxy_texture[1]);}	
-else {
-	glBindTexture(GL_TEXTURE_2D, galaxy_texture[2]);}	
+		glBindTexture(GL_TEXTURE_2D, galaxy_texture[0]);	
+	}
+	else if (type == MOON){
+		glBindTexture(GL_TEXTURE_2D, galaxy_texture[1]);}	
+	else {
+		glBindTexture(GL_TEXTURE_2D, galaxy_texture[2]);}	
 
 	glRotatef(orbitSpeed*g_time*60,0,1,0);	
 	glTranslatef(orbitRadius,0,0);
@@ -71,8 +79,9 @@ void drawClass(GClass gc,int index) {
 	}
 }
 
-void drawPackage(GPackage gp) {
+void drawPackage(GPackage gp,int p_index) {
 	if(commitNumber < gp.creationTime) return;
+	setStarLocation(p_index);
 	drawSphere(STAR_RADIUS,0,0,STAR);
 	int index = 1;
 	foreach(gclass,gp.childClasses,vector<GClass>) {

@@ -21,7 +21,7 @@ HINSTANCE g_hInstance;									// This holds the global hInstance for Unregister
 
 
 GVersion version = GVersion(0);
-float commitTimeInterval = 3.0;
+float COMMIT_TIME_INTERVAL = 0.5;
 float g_time = 0.0;
 float commitNumber;
 
@@ -110,7 +110,7 @@ WPARAM MainLoop()
 			if(AnimateNextFrame(60))					// Make sure we only animate 60 FPS
 			{
 				g_time += (float)1/60.0;
-				commitNumber = g_time/commitTimeInterval;
+				commitNumber = g_time/COMMIT_TIME_INTERVAL;
 				g_Camera.Update();							// Update the camera information
 				
 				RenderScene();								// Render the scene every frame
@@ -136,10 +136,15 @@ void RenderScene()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear The Screen And The Depth Buffer
 	glLoadIdentity();									// Reset The matrix
 	g_Camera.Look();
-	glColor3f(1,0.84,0);
+	
 
+	int pIndex = 0;
 	foreach(package,(version.childPackages),vector<GPackage>) {
-		drawPackage(*package);
+		glPushMatrix();
+		glColor3f(1,0.84,0);
+		drawPackage(*package,pIndex);
+		glPopMatrix();
+		pIndex++;
 	}
 	
 	// Swap the backbuffers to the foreground

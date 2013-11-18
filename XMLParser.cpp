@@ -280,7 +280,6 @@ void update(GVersion &v, int versionNumber){
 
 //update class data to version
 	foreach (gclass, tempClasses, vector<GClass>){
-		_RPT1( 0, "update for loop , childMethod sizes: %i\n", gclass->childMethods.size());
 		int indexP = v.searchPackage(gclass->parentPackageName);	//index of package
 		int indexC = 0;												//index of class, default to 0 for case package don't exist
 		//if package exists, then we update the class if it exists, and create new class if it does not.
