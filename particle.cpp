@@ -37,9 +37,9 @@ bool CParticle::init(const CPos &p, const CVector &v, float lifeSpan, float s, f
 	mAngle = a; // Set the angle of texture UV rotation per second
 	mColor = c; // Set the color
 	
-	//if(texName) // If a texture name was specified
-	//	return mTexture.load(texName); // Load the texture
-	//else
+	if(texName) // If a texture name was specified
+		return mTexture.load(texName); // Load the texture
+	else
 		return true;
 }
 
@@ -75,8 +75,8 @@ void CParticle::render()
 		return;
 	
 	// Can't render a particle that does not have a valid texture 
-	//if(mTexture.getId() == TEXTURE_NOT_LOADED)
-	//	return;
+	if(mTexture.getId() == TEXTURE_NOT_LOADED)
+		return;
 	
 	// This OpenGL functions makes the Z-buffer "read only".  That means OpenGL will
 	// use current z-buffer values to determine if a particle should be rendered or not, BUT,
@@ -112,7 +112,7 @@ void CParticle::render()
 	glColor3f(1,1,1);
 
 	// Set the texture for rendering
-	//mTexture.select();
+	mTexture.select();
 	
 	glPushMatrix();
 	
@@ -122,16 +122,16 @@ void CParticle::render()
 		float halfSize = mSize * 0.1f;
 		// Draw the particle
 		glBegin(GL_QUADS);
-			//glTexCoord2f(0.0f, 1.0f);
+			glTexCoord2f(0.0f, 1.0f);
 			glVertex3f(-halfSize, halfSize, 0.0f); // Top left vertex
 			
-			//glTexCoord2f(0.0f, 0.0f);
+			glTexCoord2f(0.0f, 0.0f);
 			glVertex3f(-halfSize, -halfSize, 0.0f); // Bottom left vertex
 			
-			//glTexCoord2f(1.0f, 0.0f);
+			glTexCoord2f(1.0f, 0.0f);
 			glVertex3f(halfSize, -halfSize, 0.0f); // Bottom right vertex
 			
-			//glTexCoord2f(1.0f, 1.0f);
+			glTexCoord2f(1.0f, 1.0f);
 			glVertex3f(halfSize, halfSize, 0.0f); // Top right vertex
 		glEnd();
 		
