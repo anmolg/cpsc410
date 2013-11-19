@@ -5,6 +5,7 @@
 #include "particle.h"
 
 CParticle gParticles[256]; // An array of particles
+vector<CParticle> particles;
 ///////////////////////////////// CHANGE TO FULL SCREEN \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
 /////
 /////	This changes the screen to FULL SCREEN

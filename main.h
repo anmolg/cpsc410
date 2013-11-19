@@ -14,6 +14,7 @@
 #include <gl\glu.h>										// Header File For The GLu32 Library
 #include "gl_texture.h"
 #include "particle.h"
+#include <vector>
 
 #define SCREEN_WIDTH 800								// We want our screen width 800 pixels
 #define SCREEN_HEIGHT 600								// We want our screen height 600 pixels
@@ -22,7 +23,8 @@
 
 extern float g_time;
 extern float commitNumber;
-extern CParticle gParticles[256]; // An array of particles
+extern CParticle gParticles[MAX_PARTICLES]; // An array of particles
+extern vector<CParticle> particles;
 // This is our basic 3D point/vector class
 struct CVector3
 {

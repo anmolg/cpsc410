@@ -21,17 +21,18 @@ void initStar(int index) {
 	case 0:
 		return;
 	case 1:
-		glTranslatef(STAR_DISTANCE,0,0); 
+		glTranslatef(0,STAR_DISTANCE,0); 
 		return;
 	case 2: 
-		glTranslatef(0,STAR_DISTANCE,0);
+		glTranslatef(0,2*STAR_DISTANCE,0);
 		return;
 	case 3: 
-		glTranslatef(0,0,STAR_DISTANCE); 
+		glTranslatef(0,3*STAR_DISTANCE,0); 
 		return;
 	}
 }
 
+// Loads the textures 
 void loadgalaxytextures(){
 	CreateTexture(galaxy_texture[0],"Resources/textures/Sun.bmp");
 	CreateTexture(galaxy_texture[1],"Resources/textures/Moon.bmp");
@@ -60,7 +61,7 @@ void drawSphere(float sphereRadius, float orbitRadius, float orbitSpeed, Celesti
 	glPushMatrix();
 	glRotatef(60*g_time, 0, 1.0, 0);			// Rotate the sphere around itself to produce the spin
 
-	gluSphere(pObj, sphereRadius, 24, 24);					// Draw the sphere with a radius of 0.1 (smallest planet)
+	gluSphere(pObj, sphereRadius, 24, 24);					
 	glPopMatrix();
 }
 
