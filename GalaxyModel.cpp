@@ -19,15 +19,16 @@ UINT galaxy_texture[50];
 void initStar(int index) {
 	switch (index) {
 	case 0:
+		glTranslatef(0,-0.3*STAR_DISTANCE,0); 		
 		return;
 	case 1:
-		glTranslatef(0,STAR_DISTANCE,0); 
+		glTranslatef(0,0.0*STAR_DISTANCE,0); 
 		return;
 	case 2: 
-		glTranslatef(0,2*STAR_DISTANCE,0);
+		glTranslatef(0,0.3*STAR_DISTANCE,0);
 		return;
 	case 3: 
-		glTranslatef(0,3*STAR_DISTANCE,0); 
+		glTranslatef(0,0.6*STAR_DISTANCE,0); 
 		return;
 	}
 }
@@ -86,7 +87,8 @@ void drawClass(GClass gc,int index) {
 	if (commitNumber<gc.creationTime) return;
 	glColor3f(0,1,0); // TODO : set colour corresponding to author commits.
 	int sizeIndex = (int) min(commitNumber,gc.size.size()-1);
-	float radius = PLANET_RADIUS + gc.size[sizeIndex]/100;
+	float radius = PLANET_RADIUS + pow((double)gc.size[sizeIndex]/20,(double)1/3);
+	//the volume propotional to line of code in a class, there for the radius is cube root
 	drawSphere( radius,
 				(radius/2) + index*PLANET_DISTANCE,
 				PLANET_BASE_ORBIT_SPEED/sqrt((double) index),
