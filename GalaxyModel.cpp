@@ -13,7 +13,7 @@
 #define MOON_BASE_ORBIT_SPEED 3.0 
 #define PLANET_BASE_ORBIT_SPEED 1.0 
 
-
+float dt = 1.0f / 200.0f;
 UINT galaxy_texture[50];
 
 void initStar(int index) {
@@ -40,6 +40,14 @@ void loadgalaxytextures(){
 	CreateTexture(galaxy_texture[2],"Resources/textures/Planet.bmp");
 }
 
+void drawBurningMoon() {
+	for(int i = 0; i < MAX_PARTICLES; ++i)
+	{
+		gParticles[i].render();
+		gParticles[i].process(dt);
+	}
+}
+
 void drawSphere(float sphereRadius, float orbitRadius, float orbitSpeed, CelestialType type)
 {
 
@@ -54,7 +62,7 @@ void drawSphere(float sphereRadius, float orbitRadius, float orbitSpeed, Celesti
 	}
 	else if (type == MOON){
 		glBindTexture(GL_TEXTURE_2D, galaxy_texture[1]);}	
-	else {
+	else if (type == PLANET){
 		glBindTexture(GL_TEXTURE_2D, galaxy_texture[2]);}	
 
 	glRotatef(orbitSpeed*g_time*60,0,1,0);	
@@ -62,7 +70,8 @@ void drawSphere(float sphereRadius, float orbitRadius, float orbitSpeed, Celesti
 	glPushMatrix();
 	glRotatef(60*g_time, 0, 1.0, 0);			// Rotate the sphere around itself to produce the spin
 
-	gluSphere(pObj, sphereRadius, 24, 24);					
+	if (type == BURNING) drawBurningMoon();
+	else gluSphere(pObj, sphereRadius, 24, 24);					
 	glPopMatrix();
 }
 
@@ -77,10 +86,13 @@ void drawMethod(GMethod gm, int index,float p_radius) {
 	//float randomX = rand()%100 / 100.0;
 	//float randomZ = rand()%100/100.0;
 	glRotatef(index*60,1,0,0); // arbitrary angles of rotation.
+	glPushMatrix();
+	//drawBurningMoon();
+	glPopMatrix();
 	drawSphere(	MOON_RADIUS,
-				p_radius + index*MOON_DISTANCE,
-				MOON_BASE_ORBIT_SPEED/sqrt((double) index),
-				MOON); // Last parameter just for testing
+		p_radius + index*MOON_DISTANCE,
+		MOON_BASE_ORBIT_SPEED/sqrt((double) index),
+		BURNING); // Last parameter just for testing
 }
 
 void drawClass(GClass gc,int index) {
@@ -89,10 +101,12 @@ void drawClass(GClass gc,int index) {
 	int sizeIndex = (int) min(commitNumber,gc.size.size()-1);
 	float radius = PLANET_RADIUS + pow((double)gc.size[sizeIndex]/20,(double)1/3);
 	//the volume propotional to line of code in a class, there for the radius is cube root
+
+
 	drawSphere( radius,
-				(radius/2) + index*PLANET_DISTANCE,
-				PLANET_BASE_ORBIT_SPEED/sqrt((double) index),
-				PLANET); // Last parameter is just for testing
+		(radius/2) + index*PLANET_DISTANCE,
+		PLANET_BASE_ORBIT_SPEED/sqrt((double) index),
+		PLANET); // Last parameter is just for testing
 	int i= 1;
 	foreach(gmethod,gc.childMethods,vector<GMethod>) {
 		glPushMatrix();

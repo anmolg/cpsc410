@@ -18,7 +18,7 @@ HDC   g_hDC;											// General HDC - (handle to device context)
 HGLRC g_hRC;											// General OpenGL_DC - Our Rendering Context for OpenGL
 HINSTANCE g_hInstance;									// This holds the global hInstance for UnregisterClass() in DeInit()
 
-float dt = 1.0f / 60.0f;
+
 
 GVersion version = GVersion(0);
 float COMMIT_TIME_INTERVAL = 1.0;
@@ -49,7 +49,7 @@ void Init(HWND hWnd)
 void initVersions() {
 	// Testing data
 		XMLParser xmlParser = XMLParser();
-	for (int i=1;i<8;i++) {
+	for (int i=1;i<31;i++) {
 		xmlParser.parse(i,version);
 		_RPT1( 0, "initVersions : %i\n", i);
 	}
@@ -146,13 +146,6 @@ void RenderScene()
 		pIndex++;
 	}
 	
-	// Particle stuff
-	glTranslatef(5,0,0);
-	for(int i = 0; i < MAX_PARTICLES; ++i)
-	{
-		gParticles[i].render();
-		gParticles[i].process(dt);
-	}
 
 	// Swap the backbuffers to the foreground
 	SwapBuffers(g_hDC);									
