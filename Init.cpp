@@ -1,7 +1,10 @@
 
 #include "main.h"
 
+#include "gl_texture.h"
+#include "particle.h"
 
+CParticle gParticles[256]; // An array of particles
 ///////////////////////////////// CHANGE TO FULL SCREEN \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
 /////
 /////	This changes the screen to FULL SCREEN
@@ -274,9 +277,25 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hprev, PSTR cmdline, int ishow
 
 	// If we never got a valid window handle, quit the program
 	if(hWnd == NULL) return TRUE;
-
+	
 	// INIT OpenGL
-	Init(hWnd);													
+	Init(hWnd);	
+	HDC hdc = GetDC(hWnd); // Get the window's HDC
+	for(int i = 0; i < MAX_PARTICLES; ++i)
+	{
+		// If we fail to initialize any of the particles, exit the app
+		if(!gParticles[i].init(CPos(0,0,0), // Position
+			CVector(RAND(-3.0f, 1.0f), RAND(-1.0f, 1.0f), 0.0f), // Velocity
+			RAND(0.0f, 2.0f), // Lifespan
+			0.5f, // Size 
+			30.0f, // UV rotation angle
+			ARGB(255, 215, 115, 200), // Color
+			"particle.bmp")) // Texture name
+		{
+			ReleaseDC(hWnd, hdc);
+			return EXIT_FAILURE;
+		}
+	}
 
 	// Run our message loop and after it's done, return the result
 	return MainLoop();						

@@ -167,6 +167,9 @@ bool realParse(int filename) //filename is the version number
 
 	bool isCheckingFile = false;	// file lines trigger
 	bool isCheckingMethod = false;	// method lines trigger
+	bool isCheckingCloneSet = false;
+	bool isCheckingClone = false;
+
 
 	if (file.is_open())
 	{
@@ -195,6 +198,12 @@ bool realParse(int filename) //filename is the version number
 			else if(flagTrigger(line,"METHOD")==-1){
 				isCheckingMethod =false;
 				tempMethods.push_back(tempM);
+			}
+			else if(flagTrigger(line,"CLONESET") == 1) {
+				isCheckingCloneSet = true;
+			}
+			else if(flagTrigger(line,"CLONESET") == -1) {
+				isCheckingCloneSet = false;
 			}
 
 			//-----------------------parse class stuff---------------------------
@@ -244,6 +253,8 @@ bool realParse(int filename) //filename is the version number
 
 		//---------------------parse duplication stuff-------------------------
 		//todo
+		
+
 	};
 	//cout<<"hello "<<tempClasses[0].creationTime<<endl;
 	//cout<<"hi "<<tempMethods[1].methodName<<endl;

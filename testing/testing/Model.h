@@ -83,6 +83,7 @@ public:
 	//or -1 if we can't find it
 	//we don't handle overload methods
 	int searchMethod(string methodName);
+	
 
 	vector<GMethod> childMethods;		// list of methods in the class
 	string className;	
