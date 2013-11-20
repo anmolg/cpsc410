@@ -20,11 +20,11 @@ enum CelestialType{STAR,PLANET,MOON,BURNING};
 
 void drawSphere(float sphereRadius, float orbitRadius, float orbitSpeed);
 
-void drawMethod(GMethod gm, int index,float p_radius);
+void drawMethod(GMethod& gm, int index,float p_radius);
 
-void drawClass(GClass gc,int index);
+void drawClass(GClass& gc,int index);
 
-void drawPackage(GPackage gp,int index);
+void drawPackage(GPackage& gp,int index);
 
 //void 
 //hold galaxy textures
