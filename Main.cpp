@@ -18,14 +18,114 @@ HDC   g_hDC;											// General HDC - (handle to device context)
 HGLRC g_hRC;											// General OpenGL_DC - Our Rendering Context for OpenGL
 HINSTANCE g_hInstance;									// This holds the global hInstance for UnregisterClass() in DeInit()
 
-
+UINT g_Texture[6] = {0};
 
 GVersion version = GVersion(0);
 float COMMIT_TIME_INTERVAL = 1.0;
-float g_time = 0.0;			// in seconds
+float g_time = 0.0;			// initial time , in seconds
 float commitNumber;
 
 
+
+#define BACK_ID		0									// The texture ID for the back side of the cube
+#define FRONT_ID	1									// The texture ID for the front side of the cube
+#define BOTTOM_ID	2									// The texture ID for the bottom side of the cube
+#define TOP_ID		3									// The texture ID for the top side of the cube
+#define LEFT_ID		4									// The texture ID for the left side of the cube
+#define RIGHT_ID	5									// The texture ID for the right side of the cube
+
+extern UINT g_Texture[6];						// This holds the texture info, referenced by an ID
+
+///////////////////////////////// CREATE SKY BOX \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
+
+void CreateSkyBox(float x, float y, float z, float width, float height, float length)
+{
+
+	// Bind the BACK texture of the sky map to the BACK side of the cube
+	glBindTexture(GL_TEXTURE_2D, g_Texture[BACK_ID]);
+
+	x = x - width  / 2;
+	y = y - height / 2;
+	z = z - length / 2;
+
+		// Start drawing the side as a QUAD
+	glBegin(GL_QUADS);		
+		
+		// Assign the texture coordinates and vertices for the BACK Side
+		glTexCoord2f(1.0f, 0.0f); glVertex3f(x + width, y,			z);
+		glTexCoord2f(1.0f, 1.0f); glVertex3f(x + width, y + height, z); 
+		glTexCoord2f(0.0f, 1.0f); glVertex3f(x,			y + height, z);
+		glTexCoord2f(0.0f, 0.0f); glVertex3f(x,			y,			z);
+		
+	glEnd();
+
+	// Bind the FRONT texture of the sky map to the FRONT side of the box
+	glBindTexture(GL_TEXTURE_2D, g_Texture[FRONT_ID]);
+
+	// Start drawing the side as a QUAD
+	glBegin(GL_QUADS);	
+	
+		// Assign the texture coordinates and vertices for the FRONT Side
+		glTexCoord2f(1.0f, 0.0f); glVertex3f(x,			y,			z + length);
+		glTexCoord2f(1.0f, 1.0f); glVertex3f(x,			y + height, z + length);
+		glTexCoord2f(0.0f, 1.0f); glVertex3f(x + width, y + height, z + length); 
+		glTexCoord2f(0.0f, 0.0f); glVertex3f(x + width, y,			z + length);
+	glEnd();
+
+	// Bind the BOTTOM texture of the sky map to the BOTTOM side of the box
+	glBindTexture(GL_TEXTURE_2D, g_Texture[BOTTOM_ID]);
+
+	// Start drawing the side as a QUAD
+	glBegin(GL_QUADS);		
+	
+		// Assign the texture coordinates and vertices for the BOTTOM Side
+		glTexCoord2f(1.0f, 0.0f); glVertex3f(x,			y,			z);
+		glTexCoord2f(1.0f, 1.0f); glVertex3f(x,			y,			z + length);
+		glTexCoord2f(0.0f, 1.0f); glVertex3f(x + width, y,			z + length); 
+		glTexCoord2f(0.0f, 0.0f); glVertex3f(x + width, y,			z);
+	glEnd();
+
+	// Bind the TOP texture of the sky map to the TOP side of the box
+	glBindTexture(GL_TEXTURE_2D, g_Texture[TOP_ID]);
+	
+	// Start drawing the side as a QUAD
+	glBegin(GL_QUADS);		
+		
+		// Assign the texture coordinates and vertices for the TOP Side
+		glTexCoord2f(0.0f, 1.0f); glVertex3f(x + width, y + height, z);
+		glTexCoord2f(0.0f, 0.0f); glVertex3f(x + width, y + height, z + length); 
+		glTexCoord2f(1.0f, 0.0f); glVertex3f(x,			y + height,	z + length);
+		glTexCoord2f(1.0f, 1.0f); glVertex3f(x,			y + height,	z);
+		
+	glEnd();
+
+	// Bind the LEFT texture of the sky map to the LEFT side of the box
+	glBindTexture(GL_TEXTURE_2D, g_Texture[LEFT_ID]);
+	
+	// Start drawing the side as a QUAD
+	glBegin(GL_QUADS);		
+		
+		// Assign the texture coordinates and vertices for the LEFT Side
+		glTexCoord2f(1.0f, 1.0f); glVertex3f(x,			y + height,	z);	
+		glTexCoord2f(0.0f, 1.0f); glVertex3f(x,			y + height,	z + length); 
+		glTexCoord2f(0.0f, 0.0f); glVertex3f(x,			y,			z + length);
+		glTexCoord2f(1.0f, 0.0f); glVertex3f(x,			y,			z);		
+		
+	glEnd();
+
+	// Bind the RIGHT texture of the sky map to the RIGHT side of the box
+	glBindTexture(GL_TEXTURE_2D, g_Texture[RIGHT_ID]);
+
+	// Start drawing the side as a QUAD
+	glBegin(GL_QUADS);		
+
+		// Assign the texture coordinates and vertices for the RIGHT Side
+		glTexCoord2f(0.0f, 0.0f); glVertex3f(x + width, y,			z);
+		glTexCoord2f(1.0f, 0.0f); glVertex3f(x + width, y,			z + length);
+		glTexCoord2f(1.0f, 1.0f); glVertex3f(x + width, y + height,	z + length); 
+		glTexCoord2f(0.0f, 1.0f); glVertex3f(x + width, y + height,	z);
+	glEnd();
+}
 ///////////////////////////////// INIT GAME WINDOW \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
 /////
 /////	This function initializes the game window.
@@ -38,10 +138,17 @@ void Init(HWND hWnd)
 	GetClientRect(g_hWnd, &g_rRect);					// Assign the windows rectangle to a global RECT
 	InitializeOpenGL(g_rRect.right, g_rRect.bottom);	// Init OpenGL with the global rect
 	initVersions();
+
+	CreateTexture(g_Texture[BACK_ID], "Back.bmp");
+	CreateTexture(g_Texture[FRONT_ID], "Front.bmp");
+	CreateTexture(g_Texture[BOTTOM_ID], "Bottom.bmp");
+	CreateTexture(g_Texture[TOP_ID], "Top.bmp");
+	CreateTexture(g_Texture[LEFT_ID], "Left.bmp");
+	CreateTexture(g_Texture[RIGHT_ID], "Right.bmp");
 	// Init our camera position
 	srand (time(NULL));
 						// Position        View		   Up Vector
-	g_Camera.PositionCamera(0, 1.5f, 6,   0, 1.5f, 0,   0, 1, 0);
+	g_Camera.PositionCamera(0, -10.0f, 50,   0, -10.0f, 0,   0, 1, 0);
 	loadgalaxytextures();
 	
 }
@@ -49,7 +156,7 @@ void Init(HWND hWnd)
 void initVersions() {
 	// Testing data
 		XMLParser xmlParser = XMLParser();
-	for (int i=1;i<20;i++) {
+	for (int i=1;i<123;i++) {
 		xmlParser.parse(i,version);
 		_RPT1( 0, "initVersions : %i\n", i);
 	}
@@ -146,7 +253,8 @@ void RenderScene()
 		pIndex++;
 	}
 	
-
+	glColor3f(1,1,1);
+	CreateSkyBox(0, 0, 0, 300, 150, 300);
 	// Swap the backbuffers to the foreground
 	SwapBuffers(g_hDC);									
 }

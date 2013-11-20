@@ -12,6 +12,8 @@ vector<CParticle> particles;
 /////
 ///////////////////////////////// CHANGE TO FULL SCREEN \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
 
+
+
 void ChangeToFullScreen()
 {
 	DEVMODE dmSettings;									// Device Mode variable
@@ -167,7 +169,7 @@ void SizeOpenGLScreen(int width, int height)			// Initialize The GL Window
 														// (view angle, aspect ration of the width to the height, 
 														//  the closest distance to the camera before it clips, 
 				  // FOV		// Ratio				//  the farthest distance before it stops drawing).
-	gluPerspective(45.0f,(GLfloat)width/(GLfloat)height, 1.0f, 300.0f);
+	gluPerspective(45.0f,(GLfloat)width/(GLfloat)height, 1.0f, 400.0f);
 
 	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
 	glLoadIdentity();									// Reset The Modelview Matrix

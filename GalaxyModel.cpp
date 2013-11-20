@@ -9,7 +9,7 @@
 #define PLANET_DISTANCE 10
 #define MOON_RADIUS 0.5
 #define MOON_DISTANCE 0.5
-#define STAR_DISTANCE 50
+#define STAR_DISTANCE 20
 #define MOON_BASE_ORBIT_SPEED 3.0 
 #define PLANET_BASE_ORBIT_SPEED 1.0 
 
@@ -19,16 +19,16 @@ UINT galaxy_texture[50];
 void initStar(int index) {
 	switch (index) {
 	case 0:
-		glTranslatef(0,-0.3*STAR_DISTANCE,0); 		
+		glTranslatef(0,-1.5*STAR_DISTANCE,0); 	// change MOON_DISTANCE in case you wanna modify the separation.	
 		return;
 	case 1:
-		glTranslatef(0,0.0*STAR_DISTANCE,0); 
+		glTranslatef(0,-0.5*STAR_DISTANCE,0); 
 		return;
 	case 2: 
-		glTranslatef(0,0.3*STAR_DISTANCE,0);
+		glTranslatef(0,0.5*STAR_DISTANCE,0);
 		return;
-	case 3: 
-		glTranslatef(0,0.6*STAR_DISTANCE,0); 
+	default: 
+		glTranslatef(0,1.5*STAR_DISTANCE,0); 
 		return;
 	}
 }
@@ -70,15 +70,15 @@ void drawSphere(float sphereRadius, float orbitRadius, float orbitSpeed, Celesti
 	glPushMatrix();
 	glRotatef(60*g_time, 0, 1.0, 0);			// Rotate the sphere around itself to produce the spin
 
+	float sfactor = psize/100.0;
+	glScalef(sfactor,sfactor,sfactor);
+	if (psize < 100) {
+		glColor3f(1,0,0);
+		psize++;
+	}
+
 	if (type == BURNING) drawBurningMoon();
 	else {
-
-		float sfactor = psize/100.0;
-		glScalef(sfactor,sfactor,sfactor);
-		if (psize < 100) {
-			glColor3f(1,0,0);
-			psize++;
-		}
 		gluSphere(pObj, sphereRadius, 24, 24);
 
 	}

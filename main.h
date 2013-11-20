@@ -27,6 +27,7 @@ extern CParticle gParticles[MAX_PARTICLES]; // An array of particles
 extern vector<CParticle> particles;
 
 
+
 // This is our basic 3D point/vector class
 struct CVector3
 {

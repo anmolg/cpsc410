@@ -109,7 +109,7 @@ void CParticle::render()
 	
 	// Set the color for rendering
 	//glColor3ub(red, green, blue); 
-	glColor3f(0.2,1,1);
+	glColor3f(1,1,0);
 
 	// Set the texture for rendering
 	mTexture.select();
