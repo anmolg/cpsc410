@@ -5,16 +5,22 @@ void preparse(GVersion &version);
 bool realParse(	int filename);
 void update(GVersion &version, int versionNumber);
 void postparse(GVersion &version, int versionNumber);
+
+struct GClone{
+	int parentClassID;
+	int parentMethodID;
+};
 string toString(double number);
 vector<GClass> tempClasses;
 vector<GMethod> tempMethods;
 vector<GPackage> tempPackages;
-
+vector<GClone> tempClones;
 bool XMLParser::parse(int filename, GVersion &version){
 	// clear the temp vectors at the start of parsing.
 	tempClasses.clear();
 	tempMethods.clear();
 	tempPackages.clear();
+	tempClones.clear();
 
 	// if version is not empty, do parsing preparations.
 	if (version.versionNumber != 0) preparse(version);
@@ -167,12 +173,13 @@ bool realParse(int filename) //filename is the version number
 
 	bool isCheckingFile = false;	// file lines trigger
 	bool isCheckingMethod = false;	// method lines trigger
-
+	bool isCheckingClone = false;	// clone lines trigger
 	if (file.is_open())
 	{
 		int iClass = 0;
 		GClass tempC;
 		GMethod tempM;
+		GClone tempCl;
 		while ( file.good() )
 		{
 			getline (file,line);
@@ -196,7 +203,10 @@ bool realParse(int filename) //filename is the version number
 				isCheckingMethod =false;
 				tempMethods.push_back(tempM);
 			}
-
+			else if(flagTrigger(line,"CLONE")==1){
+				isCheckingClone= true;
+				tempCl=GClone();
+			}
 			//-----------------------parse class stuff---------------------------
 			if(isCheckingFile){
 
@@ -213,7 +223,7 @@ bool realParse(int filename) //filename is the version number
 				}
 			}
 			//---------------------parse method stuff------------------------------
-			if(isCheckingMethod){
+			else if(isCheckingMethod){
 
 
 				if( getNumber(line, "METHODID") >= 0){		//method ID
@@ -225,8 +235,18 @@ bool realParse(int filename) //filename is the version number
 					tempM.methodName=getMethodName(line);// the method name
 				}
 				else if (getNumber(line, "DEFINITIONFILEID")>=0){
-	//				cout<<"yoho "<<getNumber(line, "DEFINITIONFILEID")<<endl;
 					tempM.parentClassID =getNumber(line, "DEFINITIONFILEID");
+				}
+			}
+			//--------------------parse clone stuff--------------------------------
+			else if(isCheckingClone){
+				if( getNumber(line, "OWNERFILEID")>=0){		//the class the clone located at
+					tempCl.parentClassID=getNumber(line, "OWNERFILEID");
+				}
+				else if( getNumber(line, "OWNERMETHODID")>=0){		//the class the clone located at
+					tempCl.parentMethodID=getNumber(line, "OWNERMETHODID");//the method the clone located at
+					tempClones.push_back(tempCl);
+					isCheckingClone=false;							// we got everything for this clone
 				}
 			}
 		}
@@ -249,6 +269,16 @@ bool realParse(int filename) //filename is the version number
 	//cout<<"hi "<<tempMethods[1].methodName<<endl;
 	file.close();
 
+	foreach(gclone,tempClones, vector<GClone>){
+		for(int i=0; i< tempClasses.size();i++){				//find the class that contains this clone
+			if(tempClasses[i].classID=gclone->parentClassID){
+				for(int j = 0; j< tempClasses[i].childMethods.size();j++){// find the method that contains this clone
+					if(tempClasses[i].childMethods[j].methodID==gclone->parentMethodID)
+						tempClasses[i].childMethods[j].dTemp=true;		//say this method is duplicated in this version
+				}
+			}
+		}
+	}
 
 	return true;
 }
