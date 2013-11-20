@@ -58,7 +58,7 @@ public:
 
 class GPackage {
 public:
-	GPackage(int ct, string pn){creationTime = ct; packageName = pn;}
+	GPackage(int ct, string pn){creationTime = ct; packageName = pn;animationSize = 0;}
 	GPackage(int ct){creationTime = ct; endTime =  2147483647;};
 	~GPackage(){}
 	// return the index of class,
@@ -71,13 +71,14 @@ public:
 	string packageName;
 	vector<GClass> childClasses;
 	bool alive;
+	int animationSize;
 
 };
 
 class GClass {
 public:
 	GClass(){}
-	GClass(int ct){creationTime = ct; endTime =  2147483647;}
+	GClass(int ct){creationTime = ct; endTime =  2147483647; animationSize = 0;}
 	~GClass(){}
 	// return the index of package,
 	//or -1 if we can't find it
@@ -93,7 +94,8 @@ public:
 	vector<int> size;							// number of lines, the 0th element is a dummy
 	// number of edits by each author to determine the RGB coloring
 	vector<Authors> authors;			// 125 entries, accumulative.
-
+	// a value between 0 and 100
+	int animationSize;					// Used in the animation, for shrinking and expanding the planets (has nothing to do with parsing)
 	bool alive;
 };
 
