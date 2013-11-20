@@ -18,7 +18,7 @@
 
 enum CelestialType{STAR,PLANET,MOON,BURNING};
 
-void drawSphere(float sphereRadius, float orbitRadius, float orbitSpeed);
+void drawSphere(float sphereRadius, float orbitRadius, float orbitSpeed, int& psize);
 
 void drawMethod(GMethod& gm, int index,float p_radius);
 

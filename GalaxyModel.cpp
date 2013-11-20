@@ -48,7 +48,7 @@ void drawBurningMoon() {
 	}
 }
 
-void drawSphere(float sphereRadius, float orbitRadius, float orbitSpeed, CelestialType type)
+void drawSphere(float sphereRadius, float orbitRadius, float orbitSpeed, CelestialType type, int& psize)
 {
 
 	glEnable(GL_TEXTURE_2D);
@@ -71,7 +71,17 @@ void drawSphere(float sphereRadius, float orbitRadius, float orbitSpeed, Celesti
 	glRotatef(60*g_time, 0, 1.0, 0);			// Rotate the sphere around itself to produce the spin
 
 	if (type == BURNING) drawBurningMoon();
-	else gluSphere(pObj, sphereRadius, 24, 24);					
+	else {
+
+		float sfactor = psize/100.0;
+		glScalef(sfactor,sfactor,sfactor);
+		if (psize < 100) {
+			glColor3f(1,0,0);
+			psize++;
+		}
+		gluSphere(pObj, sphereRadius, 24, 24);
+
+	}
 	glPopMatrix();
 }
 
@@ -88,25 +98,22 @@ void drawMethod(GMethod& gm, int index,float p_radius) {
 	glPushMatrix();
 	//drawBurningMoon();
 	glPopMatrix();
-	if (sin((double) index) > 0) {
+	if (sin((double) index) <= 0) {
 
 	drawSphere(	MOON_RADIUS,
 		p_radius + index*MOON_DISTANCE,
 		MOON_BASE_ORBIT_SPEED/sqrt((double) index),
-		BURNING); // Last parameter just for testing
+		BURNING,
+		gm.psize); // Last parameter just for testing
 	}
 	else {
-		glPushMatrix();
-		float sfactor = gm.psize/100.0;
-		//glScalef(sfactor,sfactor,sfactor);
-		if (gm.psize < 100)
-			gm.psize++;
+
 	drawSphere(	MOON_RADIUS,
 		p_radius + index*MOON_DISTANCE,
 		MOON_BASE_ORBIT_SPEED/sqrt((double) index),
-		MOON); // Last parameter just for testing
+		MOON,
+		gm.psize); // Last parameter just for testing
 
-		glPopMatrix();
 	}
 }
 
@@ -116,20 +123,12 @@ void drawClass(GClass& gc,int index) {
 	int sizeIndex = (int) min(commitNumber,gc.size.size()-1);
 	float radius = PLANET_RADIUS + pow((double)gc.size[sizeIndex]/20,(double)1/3);
 	//the volume propotional to line of code in a class, there for the radius is cube root
-
-	glPushMatrix();
-	float sfactor = gc.psize/100.0;
-	//glScalef(sfactor,sfactor,sfactor);
-	if (gc.psize < 100)
-		gc.psize++;
-
-
 	drawSphere( radius,
 		(radius/2) + index*PLANET_DISTANCE,
 		PLANET_BASE_ORBIT_SPEED/sqrt((double) index),
-		PLANET); // Last parameter is just for testing
-	glPopMatrix();
-	
+		PLANET,
+		gc.psize); // Last parameter is just for testing
+
 	int i= 1;
 	foreach(gmethod,gc.childMethods,vector<GMethod>) {
 		glPushMatrix();
@@ -143,13 +142,8 @@ void drawPackage(GPackage& gp,int p_index) {
 	if(commitNumber < gp.creationTime) return;
 	initStar(p_index);				// set star location
 	glColor3f(1,0.84,0);
-	glPushMatrix();
-	float sfactor = gp.psize/100.0;
-	//glScalef(sfactor,sfactor,sfactor);
-	if (gp.psize < 100)
-		gp.psize++;
-	drawSphere(STAR_RADIUS,0,0,STAR);
-	glPopMatrix();
+
+	drawSphere(STAR_RADIUS,0,0,STAR,gp.psize);
 	
 	int index = 1;
 	foreach(gclass,gp.childClasses,vector<GClass>) {
