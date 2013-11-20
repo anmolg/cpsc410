@@ -78,7 +78,6 @@ void drawSphere(float sphereRadius, float orbitRadius, float orbitSpeed, Celesti
 void drawMethod(GMethod gm, int index,float p_radius) {
 	// checking whether the moon should be displayed
 	// displays when creationTime <= commitNumber < endTime
-
 	if (commitNumber < gm.creationTime) return;
 	if (commitNumber >= gm.endTime) return;
 	glColor3f(1,1,1);
@@ -89,10 +88,18 @@ void drawMethod(GMethod gm, int index,float p_radius) {
 	glPushMatrix();
 	//drawBurningMoon();
 	glPopMatrix();
+	if (sin((double) index) > 0) {
 	drawSphere(	MOON_RADIUS,
 		p_radius + index*MOON_DISTANCE,
 		MOON_BASE_ORBIT_SPEED/sqrt((double) index),
 		BURNING); // Last parameter just for testing
+	}
+	else {
+	drawSphere(	MOON_RADIUS,
+		p_radius + index*MOON_DISTANCE,
+		MOON_BASE_ORBIT_SPEED/sqrt((double) index),
+		MOON); // Last parameter just for testing
+	}
 }
 
 void drawClass(GClass gc,int index) {

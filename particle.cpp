@@ -109,7 +109,7 @@ void CParticle::render()
 	
 	// Set the color for rendering
 	//glColor3ub(red, green, blue); 
-	glColor3f(1,1,1);
+	glColor3f(0.2,1,1);
 
 	// Set the texture for rendering
 	mTexture.select();
@@ -119,7 +119,7 @@ void CParticle::render()
 		// Move to the world position of where to draw the particle
 		glTranslatef(mPos.x, mPos.y, mPos.z);
 		
-		float halfSize = mSize * 0.1f;
+		float halfSize = mSize * 0.05f;
 		// Draw the particle
 		glBegin(GL_QUADS);
 			glTexCoord2f(0.0f, 1.0f);

@@ -22,7 +22,7 @@ HINSTANCE g_hInstance;									// This holds the global hInstance for Unregister
 
 GVersion version = GVersion(0);
 float COMMIT_TIME_INTERVAL = 1.0;
-float g_time = 0.0;
+float g_time = 0.0;			// in seconds
 float commitNumber;
 
 
@@ -49,7 +49,7 @@ void Init(HWND hWnd)
 void initVersions() {
 	// Testing data
 		XMLParser xmlParser = XMLParser();
-	for (int i=1;i<31;i++) {
+	for (int i=78;i<81;i++) {
 		xmlParser.parse(i,version);
 		_RPT1( 0, "initVersions : %i\n", i);
 	}
