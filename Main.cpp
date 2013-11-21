@@ -156,9 +156,22 @@ void Init(HWND hWnd)
 void initVersions() {
 	// Testing data
 		XMLParser xmlParser = XMLParser();
-	for (int i=1;i<123;i++) {
+	for (int i=1;i<23;i++) {
 		xmlParser.parse(i,version);
 		_RPT1( 0, "initVersions : %i\n", i);
+		if(i==6){
+			for (int j=0;j<version.childPackages.size();j++){
+				_RPT1(0, "package: %i\n",j);
+				for(int k=0; k<version.childPackages[j].childClasses.size();k++){
+					int boolNum =0;
+					//if (k,version.childPackages[j].childClasses[k].alive) boolNum=1;
+					_RPT2(0, "	class: %i	end time: %i\n",k,version.childPackages[j].childClasses[k].endTime);
+					for(int l=0; l<version.childPackages[j].childClasses[k].size.size();l++){
+						_RPT2(0, "		size[%i]: %i\n",l,version.childPackages[j].childClasses[k].size[l]);
+					}
+				}
+			}
+		}
 	}
 }
 

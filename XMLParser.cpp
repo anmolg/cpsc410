@@ -23,7 +23,7 @@ bool XMLParser::parse(int filename, GVersion &version){
 	tempClones.clear();
 
 	// if version is not empty, do parsing preparations.
-	if (version.versionNumber != 0) preparse(version);
+	if (filename != 0) preparse(version);
 	realParse(filename);
 	update(version, filename);
 	postparse(version, filename);
@@ -165,8 +165,7 @@ int flagTrigger(string str, string keyword){
 }
 
 bool realParse(int filename) //filename is the version number
-{
-	string line, targetString, s;
+{	string line, targetString, s;
 	s= toString(filename);
 	//cout <<s.c_str()<<endl;
 	ifstream file (s.c_str());
@@ -340,7 +339,7 @@ void update(GVersion &v, int versionNumber){
 			}
 		//class doesn't exist
 			else {					
-				for(int i=0; i<versionNumber; i++){				//this class' size for all previous versions are 0
+				for(int i=0; i<versionNumber-1; i++){				//this class' size for all previous versions are 0
 					gclass->size.push_back(0);						//preserve the last slot for the real size
 				}
 				//// add method info
