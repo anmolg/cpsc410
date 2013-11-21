@@ -254,6 +254,7 @@ bool realParse(int filename) //filename is the version number
 		gmethod->id = gmethod->newID();
 		for(int i=0; i<tempClasses.size();i++){
 			if(tempClasses[i].classID==gmethod->parentClassID){
+				gmethod->creationTime=filename;
 				gmethod->alive=true;
 				tempClasses[i].childMethods.push_back(*gmethod);
 				break;
@@ -320,19 +321,20 @@ void update(GVersion &v, int versionNumber){
 				v.childPackages[indexP].childClasses[indexC].classID = gclass->classID;
 				v.childPackages[indexP].childClasses[indexC].size.push_back(gclass->size[0]);// add the new snap shot of size
 				v.childPackages[indexP].childClasses[indexC].alive = true;//this class is alive again
-				foreach(gmethod,gclass->childMethods,vector<GMethod>){
+				for(int indexTM=0;indexTM<gclass->childMethods.size();indexTM++){
 					bool updated =false;
-					for(int i=0;i<v.childPackages[indexP].childClasses[indexC].childMethods.size();i++){
-						if (v.childPackages[indexP].childClasses[indexC].childMethods[i].methodName == gmethod->methodName){
-							v.childPackages[indexP].childClasses[indexC].childMethods[i].methodID = gmethod->methodID;//method exist, update
+					for(int indexM=0;indexM<v.childPackages[indexP].childClasses[indexC].childMethods.size();indexM++){
+						if (v.childPackages[indexP].childClasses[indexC].childMethods[indexM].methodName == gclass->childMethods[indexTM].methodName){
+							v.childPackages[indexP].childClasses[indexC].childMethods[indexM].methodID = gclass->childMethods[indexTM].methodID;//method exist, update
+							v.childPackages[indexP].childClasses[indexC].childMethods[indexM].alive=true;										//method is alive again
 //todo, handle the duplication id							
 							updated = true;
 						}
 					}
 					if (!updated){
-						gmethod->creationTime = versionNumber;
-						gmethod->id = gmethod->newID();
-						v.childPackages[indexP].childClasses[indexC].childMethods.push_back(*gmethod);// new method, add it
+						gclass->childMethods[indexTM].creationTime = versionNumber;
+						gclass->childMethods[indexTM].id = gclass->childMethods[indexTM].newID();
+						v.childPackages[indexP].childClasses[indexC].childMethods.push_back(gclass->childMethods[indexTM]);// new method, add it
 					}
 				}
 				v.childPackages[indexP].childClasses[indexC].alive = true;//this class a alive again

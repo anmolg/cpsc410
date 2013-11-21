@@ -159,15 +159,18 @@ void initVersions() {
 	for (int i=1;i<23;i++) {
 		xmlParser.parse(i,version);
 		_RPT1( 0, "initVersions : %i\n", i);
-		if(i==10){
+		if(i==22){
 			for (int j=0;j<version.childPackages.size();j++){
 				_RPT1(0, "package: %i\n",j);
 				for(int k=0; k<version.childPackages[j].childClasses.size();k++){
 					int boolNum =0;
 					//if (k,version.childPackages[j].childClasses[k].alive) boolNum=1;
 					_RPT2(0, "	class: %i	end time: %i\n",k,version.childPackages[j].childClasses[k].endTime);
-					for(int l=0; l<version.childPackages[j].childClasses[k].size.size();l++){
-						_RPT2(0, "		size[%i]: %i\n",l,version.childPackages[j].childClasses[k].size[l]);
+//					for(int l=0; l<version.childPackages[j].childClasses[k].size.size();l++){
+	//					_RPT2(0, "		size[%i]: %i\n",l,version.childPackages[j].childClasses[k].size[l]);
+		//			}
+					for (int l=0;  l<version.childPackages[j].childClasses[k].childMethods.size();l++){
+						_RPT2(0,"		method: %i end time: %i\n",l, version.childPackages[j].childClasses[k].childMethods[l].endTime);
 					}
 				}
 			}
