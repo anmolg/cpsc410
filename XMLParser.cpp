@@ -256,6 +256,7 @@ bool realParse(int filename) //filename is the version number
 			if(tempClasses[i].classID==gmethod->parentClassID){
 				gmethod->creationTime=filename;
 				gmethod->alive=true;
+				gmethod->dTemp=false;
 				tempClasses[i].childMethods.push_back(*gmethod);
 				break;
 			}

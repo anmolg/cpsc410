@@ -159,7 +159,7 @@ void initVersions() {
 	for (int i=1;i<123;i++) {
 		xmlParser.parse(i,version);
 		_RPT1( 0, "initVersions : %i\n", i);
-		if(i==123){
+		if(i==30){
 			for (int j=0;j<version.childPackages.size();j++){
 				_RPT1(0, "package: %i\n",j);
 				for(int k=0; k<version.childPackages[j].childClasses.size();k++){
@@ -275,7 +275,7 @@ void RenderScene()
 	}
 	
 	glColor3f(1,1,1);
-	CreateSkyBox(0, 0, 0, 300, 150, 300);
+	//CreateSkyBox(0, 0, 0, 300, 150, 300);
 	// Swap the backbuffers to the foreground
 	SwapBuffers(g_hDC);									
 }

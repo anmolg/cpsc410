@@ -98,7 +98,7 @@ void drawMethod(GMethod& gm, int index,float p_radius) {
 	glPushMatrix();
 	//drawBurningMoon();
 	glPopMatrix();
-	if (sin((double) index) <= 0) {
+	if (gm.duplications[min(commitNumber,gm.duplications.size()-1)]) {
 
 	drawSphere(	MOON_RADIUS,
 		p_radius + index*MOON_DISTANCE,
@@ -107,7 +107,7 @@ void drawMethod(GMethod& gm, int index,float p_radius) {
 		gm.psize); // Last parameter just for testing
 	}
 	else {
-
+	glColor3f(1,1,1);
 	drawSphere(	MOON_RADIUS,
 		p_radius + index*MOON_DISTANCE,
 		MOON_BASE_ORBIT_SPEED/sqrt((double) index),
