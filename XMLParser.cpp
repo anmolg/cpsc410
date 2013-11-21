@@ -326,8 +326,8 @@ void update(GVersion &v, int versionNumber){
 					for(int indexM=0;indexM<v.childPackages[indexP].childClasses[indexC].childMethods.size();indexM++){
 						if (v.childPackages[indexP].childClasses[indexC].childMethods[indexM].methodName == gclass->childMethods[indexTM].methodName){
 							v.childPackages[indexP].childClasses[indexC].childMethods[indexM].methodID = gclass->childMethods[indexTM].methodID;//method exist, update
+							v.childPackages[indexP].childClasses[indexC].childMethods[indexM].duplications.push_back(gclass->childMethods[indexTM].dTemp);//set the status of duplication of the newest version
 							v.childPackages[indexP].childClasses[indexC].childMethods[indexM].alive=true;										//method is alive again
-//todo, handle the duplication id							
 							updated = true;
 						}
 					}
@@ -335,6 +335,11 @@ void update(GVersion &v, int versionNumber){
 						gclass->childMethods[indexTM].creationTime = versionNumber;
 						gclass->childMethods[indexTM].id = gclass->childMethods[indexTM].newID();
 						v.childPackages[indexP].childClasses[indexC].childMethods.push_back(gclass->childMethods[indexTM]);// new method, add it
+						int indexM=v.childPackages[indexP].childClasses[indexC].childMethods.size()-1;
+						for(int i=0;i<versionNumber;i++){		//for version that don't have this method, can't be duplicated
+							v.childPackages[indexP].childClasses[indexC].childMethods[indexM].duplications.push_back(false);
+						}
+						v.childPackages[indexP].childClasses[indexC].childMethods[indexM].duplications.push_back(gclass->childMethods[indexTM].dTemp);//set the current duplication status
 					}
 				}
 				v.childPackages[indexP].childClasses[indexC].alive = true;//this class a alive again
@@ -352,6 +357,13 @@ void update(GVersion &v, int versionNumber){
 				gclass->size.push_back(gclass->size[0]);			//set the real size for this version
 				gclass->creationTime = versionNumber;					
 				v.childPackages[indexP].childClasses.push_back(*gclass);//add the new class to the package
+				int indexC=v.childPackages[indexP].childClasses.size()-1;
+				for(int indexM =0; indexM<v.childPackages[indexP].childClasses[indexC].childMethods.size(); indexM++){
+					for(int i =0; i<versionNumber;i++){//for version that don't have this method, can't be duplicated
+						v.childPackages[indexP].childClasses[indexC].childMethods[indexM].duplications.push_back(false);
+					}
+					v.childPackages[indexP].childClasses[indexC].childMethods[indexM].duplications.push_back(v.childPackages[indexP].childClasses[indexC].childMethods[indexM].dTemp);//set the current duplication status
+				}
 			}
 			v.childPackages[indexP].alive = true;						// this package is now alive
 		}
@@ -364,10 +376,17 @@ void update(GVersion &v, int versionNumber){
 			}
 			gclass->size.push_back(gclass->size[0]);			//set the real size for this version
 			gclass->creationTime=versionNumber;
-			int j=v.childPackages.size()-1;
-			v.childPackages[j].childClasses.push_back(*gclass);//add the new class to the package
-			v.childPackages[j].alive = true;
-			v.childPackages[j].creationTime = versionNumber;
+			int indexP=v.childPackages.size()-1;
+			v.childPackages[indexP].childClasses.push_back(*gclass);//add the new class to the package
+			int indexC=v.childPackages[indexP].childClasses.size()-1;
+			for(int indexM =0; indexM<v.childPackages[indexP].childClasses[indexC].childMethods.size(); indexM++){
+				for(int i =0; i<versionNumber;i++){//for version that don't have this method, can't be duplicated
+					v.childPackages[indexP].childClasses[indexC].childMethods[indexM].duplications.push_back(false);
+				}
+				v.childPackages[indexP].childClasses[indexC].childMethods[indexM].duplications.push_back(v.childPackages[indexP].childClasses[indexC].childMethods[indexM].dTemp);//set the current duplication status
+			}
+			v.childPackages[indexP].alive = true;
+			v.childPackages[indexP].creationTime = versionNumber;
 		}
 	}
 }
@@ -375,9 +394,11 @@ void update(GVersion &v, int versionNumber){
 //convert a number to string
 
 void postparseMethod(GMethod &m, int versionNumber){
-	if(m.alive== false)
+	if(m.alive== false){
+		m.duplications.push_back(false);
 		if(m.endTime>versionNumber)
 			m.endTime=versionNumber;	//a method passed away at this time, amen!
+	}
 }
 
 void postparseClass(GClass &c, int versionNumber){
@@ -394,9 +415,10 @@ void postparseClass(GClass &c, int versionNumber){
 }
 
 void postparsePackage(GPackage &p, int versionNumber){
-	if(p.alive ==false)
+	if(p.alive ==false){
 		if(p.endTime>versionNumber)
 			p.endTime=versionNumber;	//a package passed away at this time, amen!
+	}
 	for (int i= 0; i<p.childClasses.size();i++)
 		postparseClass(p.childClasses[i],versionNumber);
 }
