@@ -272,7 +272,7 @@ bool realParse(int filename) //filename is the version number
 
 	foreach(gclone,tempClones, vector<GClone>){
 		for(int i=0; i< tempClasses.size();i++){				//find the class that contains this clone
-			if(tempClasses[i].classID=gclone->parentClassID){
+			if(tempClasses[i].classID==gclone->parentClassID){
 				for(int j = 0; j< tempClasses[i].childMethods.size();j++){// find the method that contains this clone
 					if(tempClasses[i].childMethods[j].methodID==gclone->parentMethodID)
 						tempClasses[i].childMethods[j].dTemp=true;		//say this method is duplicated in this version

@@ -4,9 +4,9 @@
 #include "GalaxyModel.h"
 #include <math.h>
 
-#define STAR_RADIUS 2
+#define STAR_RADIUS 7
 #define PLANET_RADIUS 0.5
-#define PLANET_DISTANCE 10
+#define PLANET_DISTANCE 30
 #define MOON_RADIUS 0.5
 #define MOON_DISTANCE 0.5
 #define STAR_DISTANCE 20
@@ -126,7 +126,7 @@ void drawPackage(GPackage& gp,int p_index) {
 	glColor3f(1,0.84,0);
 
 	drawSphere(STAR_RADIUS,0,0,STAR,gp.psize);
-	
+
 	int index = 1;
 	foreach(gclass,gp.childClasses,vector<GClass>) {
 		glPushMatrix();
