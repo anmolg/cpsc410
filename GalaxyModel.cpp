@@ -16,21 +16,10 @@
 float dt = 1.0f / 200.0f;
 UINT galaxy_texture[50];
 
-void initStar(int index) {
-	switch (index) {
-	case 0:
-		glTranslatef(0,-1.5*STAR_DISTANCE,0); 	// change MOON_DISTANCE in case you wanna modify the separation.	
-		return;
-	case 1:
-		glTranslatef(0,-0.5*STAR_DISTANCE,0); 
-		return;
-	case 2: 
-		glTranslatef(0,0.5*STAR_DISTANCE,0);
-		return;
-	default: 
-		glTranslatef(0,1.5*STAR_DISTANCE,0); 
-		return;
-	}
+// Sets the star's location in a linear fashion.
+void setStarLocation(int index) {
+	glTranslatef(0,(-1.5 + index)*STAR_DISTANCE,0);
+	return;
 }
 
 // Loads the textures 
@@ -40,6 +29,7 @@ void loadgalaxytextures(){
 	CreateTexture(galaxy_texture[2],"Resources/textures/Planet.bmp");
 }
 
+// 
 void drawBurningMoon() {
 	for(int i = 0; i < MAX_PARTICLES; ++i)
 	{
@@ -99,8 +89,8 @@ void drawMethod(GMethod& gm, int index,float p_radius) {
 		MOON_BASE_ORBIT_SPEED/sqrt((double) index),
 		MOON,
 		gm.psize); // Last parameter just for testing
-	if (gm.duplications[min(commitNumber,gm.duplications.size()-1)]) {
-		if (gm.psize < 100) glColor3f(1,0,0);
+	if (gm.duplications[(int) min(commitNumber,gm.duplications.size()-1)]) {
+		if (gm.p_timer < 60) { glColor3f(1,0,0); gm.p_timer++;}
 		else glColor3f(1,1,0);
 		drawBurningMoon();
 	}
@@ -132,7 +122,7 @@ void drawClass(GClass& gc,int index) {
 
 void drawPackage(GPackage& gp,int p_index) {
 	if(commitNumber < gp.creationTime) return;
-	initStar(p_index);				// set star location
+	setStarLocation(p_index);				// set star location
 	glColor3f(1,0.84,0);
 
 	drawSphere(STAR_RADIUS,0,0,STAR,gp.psize);

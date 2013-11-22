@@ -83,7 +83,7 @@ void CParticle::render()
 		// Move to the world position of where to draw the particle
 		glTranslatef(mPos.x, mPos.y, mPos.z);
 		
-		float halfSize = mSize * 0.2f;
+		float halfSize = mSize * 0.5f;
 		// Draw the particle
 		glBegin(GL_TRIANGLES);
 			glTexCoord2f(0.0f, 1.0f);

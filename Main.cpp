@@ -2,9 +2,6 @@
 #pragma comment(lib, "opengl32.lib")
 #pragma comment(lib, "glu32.lib")
 
-
-
-
 #include "main.h"										// This includes our header file
 #include "Camera.h"
 #include <stdlib.h>     /* srand, rand */
@@ -22,7 +19,7 @@ UINT g_Texture[6] = {0};
 
 GVersion version = GVersion(0);
 float COMMIT_TIME_INTERVAL = 1.0;
-float g_time = 0.0;			// initial time , in seconds
+
 float commitNumber;
 
 
@@ -153,6 +150,7 @@ void Init(HWND hWnd)
 	
 }
 
+float g_time = 0.0;			// initial time , in seconds
 void initVersions() {
 	// Testing data
 		XMLParser xmlParser = XMLParser();
@@ -160,7 +158,7 @@ void initVersions() {
 		xmlParser.parse(i,version);
 		_RPT1( 0, "initVersions : %i\n", i);
 
-		if(i==30){
+		if(i==121){
 			for (int j=0;j<version.childPackages.size();j++){
 				_RPT1(0, "package: %i\n",j);
 				for(int k=0; k<version.childPackages[j].childClasses.size();k++){

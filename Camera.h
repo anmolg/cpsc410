@@ -10,18 +10,12 @@ public:
 	// Our camera constructor
 	CCamera();	
 
-
-/////// * /////////// * /////////// * NEW * /////// * /////////// * /////////// *
-
 	// These are are data access functions for our camera's private data
 	CVector3 Position() {	return m_vPosition;		}
 	CVector3 View()		{	return m_vView;			}
 	CVector3 UpVector() {	return m_vUpVector;		}
 	CVector3 Strafe()	{	return m_vStrafe;		}
 
-/////// * /////////// * /////////// * NEW * /////// * /////////// * /////////// *
-
-	
 	// This changes the position, view, and up vector of the camera.
 	// This is primarily used for initialization
 	void PositionCamera(float positionX, float positionY, float positionZ,
@@ -37,23 +31,14 @@ public:
 	// This rotates the camera around a point (I.E. your character).
 	void RotateAroundPoint(CVector3 vCenter, float X, float Y, float Z);
 
-
-/////// * /////////// * /////////// * NEW * /////// * /////////// * /////////// *
-
 	// This strafes the camera left or right depending on the speed (+/-) 
 	void StrafeCamera(float speed);
-
-/////// * /////////// * /////////// * NEW * /////// * /////////// * /////////// *
-
 
 	// This will move the camera forward or backward depending on the speed
 	void MoveCamera(float speed);
 
 	// This checks for keyboard movement
 	void CheckForMovement();
-
-
-/////// * /////////// * /////////// * NEW * /////// * /////////// * /////////// *
 
 	// This updates the camera's view and other data (Should be called each frame)
 	void Update();
@@ -74,8 +59,6 @@ private:
 	
 	// The camera's strafe vector
 	CVector3 m_vStrafe;						
-
-/////// * /////////// * /////////// * NEW * /////// * /////////// * /////////// *
 
 };
 

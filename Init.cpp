@@ -65,7 +65,7 @@ HWND CreateMyWindow(LPSTR strWindowName, int width, int height, DWORD dwStyle, b
 	wndclass.hIcon = LoadIcon(NULL, IDI_APPLICATION);	// General icon
 	wndclass.hCursor = LoadCursor(NULL, IDC_ARROW);		// An arrow for the cursor
 	wndclass.hbrBackground = (HBRUSH) (COLOR_WINDOW+1);	// A white window
-	wndclass.lpszClassName = "GameTutorials";			// Assign the class name
+	wndclass.lpszClassName = "CodeGalaxy";			// Assign the class name
 
 	RegisterClass(&wndclass);							// Register the class
 	
@@ -89,7 +89,7 @@ HWND CreateMyWindow(LPSTR strWindowName, int width, int height, DWORD dwStyle, b
 	AdjustWindowRect( &rWindow, dwStyle, false);		// Adjust Window To True Requested Size
 
 														// Create the window
-	hWnd = CreateWindow("GameTutorials", strWindowName, dwStyle, 0, 0,
+	hWnd = CreateWindow("CodeGalaxy", strWindowName, dwStyle, 0, 0,
 						rWindow.right  - rWindow.left, rWindow.bottom - rWindow.top, 
 						NULL, NULL, hInstance, NULL);
 
@@ -219,7 +219,7 @@ void DeInit()
 		ShowCursor(TRUE);								// Show Mouse Pointer
 	}
 
-	UnregisterClass("GameTutorials", g_hInstance);		// Free the window class
+	UnregisterClass("CodeGalaxy", g_hInstance);		// Free the window class
 
 	PostQuitMessage (0);								// Post a QUIT message to the window
 }
@@ -271,7 +271,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hprev, PSTR cmdline, int ishow
 	HWND hWnd;
 
 	// Check if we want full screen or not
-	if(MessageBox(NULL, "Click Yes to go to full screen (Recommended)", "Options", MB_YESNO | MB_ICONQUESTION) == IDNO)
+	if(MessageBox(NULL, "Click Yes to go to full screen", "Options", MB_YESNO | MB_ICONQUESTION) == IDNO)
 		g_bFullScreen = false;
 	
 	// Create our window with our function we create that passes in the:
@@ -291,7 +291,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hprev, PSTR cmdline, int ishow
 		if(!gParticles[i].init(CPos(0,0,0), // Position
 			CVector(RAND(-pSpeed, pSpeed), RAND(0, pSpeed), RAND(-pSpeed, pSpeed)), // Velocity
 			RAND(0.0f, 2.0f), // Lifespan
-			1.0f, // Size 
+			0.4f, // Size 
 			30.0f, // UV rotation angle
 			"particle.bmp")) // Texture name
 		{
