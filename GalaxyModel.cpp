@@ -9,7 +9,7 @@
 #define PLANET_DISTANCE 30
 #define MOON_RADIUS 0.5
 #define MOON_DISTANCE 0.5
-#define STAR_DISTANCE 20
+#define STAR_DISTANCE 30
 #define MOON_BASE_ORBIT_SPEED 3.0 
 #define PLANET_BASE_ORBIT_SPEED 1.0 
 
@@ -18,6 +18,7 @@ UINT galaxy_texture[50];
 
 // Sets the star's location in a linear fashion.
 void setStarLocation(int index) {
+	if (index == 4) return;
 	glTranslatef(0,(-1.5 + index)*STAR_DISTANCE,0);
 	return;
 }

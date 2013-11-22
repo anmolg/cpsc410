@@ -56,9 +56,6 @@ void CParticle::process(float dt)
 	mPos.x += mVel.x * dt;
 	mPos.y += mVel.y * dt;
 	mPos.z += mVel.z * dt;
-	
-	// Apply gravity
-	//mPos.y += kParticleGravity * dt;
 		
 	mLife -= dt; // Decrease particle's life span
 	
