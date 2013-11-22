@@ -25,8 +25,8 @@ bool GitlogParser::parse(int filename, GVersion &version){
 	// if version is not empty, do parsing preparations.
 	preparse(version);
 	realParse(filename);
-	update(version, filename);
-	postparse(version, filename);
+	//update(version, filename);
+	//postparse(version, filename);
 	return true;
 };
 
@@ -303,47 +303,10 @@ bool realParse(int filename) //filename is the version number
 					//tempC.parentPackageName=path[1];// the first element will be package name				}
 				}
 			}
-			//---------------------parse method stuff------------------------------
-			else if(isCheckingMethod){
-
-
-				if( getNumber(line, "METHODID") >= 0){		//method ID
-					tempM.methodID= getNumber(line, "METHODID"); // method id
-				}
-
-				else if (getMethodName(line) != ""){
-
-					tempM.methodName=getMethodName(line);// the method name
-				}
-				else if (getNumber(line, "DEFINITIONFILEID")>=0){
-					tempM.parentClassID =getNumber(line, "DEFINITIONFILEID");
-				}
-			}
 			//--------------------parse clone stuff--------------------------------
-			else if(isCheckingClone){
-				if( getNumber(line, "OWNERFILEID")>=0){		//the class the clone located at
-					tempCl.parentClassID=getNumber(line, "OWNERFILEID");
-				}
-				else if( getNumber(line, "OWNERMETHODID")>=0){		//the class the clone located at
-					tempCl.parentMethodID=getNumber(line, "OWNERMETHODID");//the method the clone located at
-					tempClones.push_back(tempCl);
-					isCheckingClone=false;							// we got everything for this clone
-				}
-			}
+			
 		}
-	//insert method stuff to class array
-	foreach(gmethod,tempMethods,vector<GMethod>){
-		gmethod->id = gmethod->newID();
-		for(int i=0; i<tempClasses.size();i++){
-			if(tempClasses[i].classID==gmethod->parentClassID){
-				gmethod->creationTime=filename;
-				gmethod->alive=true;
-				gmethod->dTemp=false;
-				tempClasses[i].childMethods.push_back(*gmethod);
-				break;
-			}
-		}
-	}
+
 
 		//---------------------parse duplication stuff-------------------------
 		//todo
@@ -351,18 +314,6 @@ bool realParse(int filename) //filename is the version number
 	//cout<<"hello "<<tempClasses[0].creationTime<<endl;
 	//cout<<"hi "<<tempMethods[1].methodName<<endl;
 	file.close();
-
-	foreach(gclone,tempClones, vector<GClone>){
-		for(int i=0; i< tempClasses.size();i++){				//find the class that contains this clone
-			if(tempClasses[i].classID=gclone->parentClassID){
-				for(int j = 0; j< tempClasses[i].childMethods.size();j++){// find the method that contains this clone
-					if(tempClasses[i].childMethods[j].methodID==gclone->parentMethodID)
-						tempClasses[i].childMethods[j].dTemp=true;		//say this method is duplicated in this version
-				}
-			}
-		}
-	}
-
 	return true;
 }
 
@@ -397,6 +348,7 @@ void preparse(GVersion &v){
 	}
 }
 
+/*
 void update(GVersion &v, int versionNumber){
 
 //update class data to version
@@ -480,11 +432,19 @@ void update(GVersion &v, int versionNumber){
 		}
 	}
 }
+*/
 
-//convert a number to string
+/*
+// convert number to string
+string toString(double number)
+{
+   stringstream ss;//create a stringstream
+   ss << number;//add number to the stream
+   return ss.str();//return a string with the contents of the stream
+}
 
-
-
+*/
+/*
 void postparseClass(GClass &c, int versionNumber){
 	if(c.alive ==false){
 		c.size.push_back(0);
@@ -511,11 +471,5 @@ void postparse(GVersion &v, int versionNumber){
 	for (int i= 0; i<v.childPackages.size();i++)
 		postparsePackage(v.childPackages[i], versionNumber);
 };
+*/
 
-// convert number to string
-string toString(double number)
-{
-   stringstream ss;//create a stringstream
-   ss << number;//add number to the stream
-   return ss.str();//return a string with the contents of the stream
-}
