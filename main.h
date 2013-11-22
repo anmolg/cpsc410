@@ -19,13 +19,12 @@
 #define SCREEN_WIDTH 800								// We want our screen width 800 pixels
 #define SCREEN_HEIGHT 600								// We want our screen height 600 pixels
 #define SCREEN_DEPTH 16									// We want 16 bits per pixel
-#define MAX_PARTICLES 32
+#define MAX_PARTICLES 64
 
 extern float g_time;
 extern float commitNumber;
 extern CParticle gParticles[MAX_PARTICLES]; // An array of particles
 extern vector<CParticle> particles;
-
 
 
 // This is our basic 3D point/vector class

@@ -276,7 +276,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hprev, PSTR cmdline, int ishow
 	
 	// Create our window with our function we create that passes in the:
 	// name, width, height, any flags for the window, if we want fullscreen of not, and the hInstance.
-	hWnd = CreateMyWindow("www.GameTutorials.com - Camera Strafing", SCREEN_WIDTH, SCREEN_HEIGHT, 0, g_bFullScreen, hInstance);
+	hWnd = CreateMyWindow("CodeGalaxy", SCREEN_WIDTH, SCREEN_HEIGHT, 0, g_bFullScreen, hInstance);
 
 	// If we never got a valid window handle, quit the program
 	if(hWnd == NULL) return TRUE;
@@ -287,13 +287,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hprev, PSTR cmdline, int ishow
 	for(int i = 0; i < MAX_PARTICLES; ++i)
 	{
 		// If we fail to initialize any of the particles, exit the app
-		GLfloat pSpeed = 0.5f;
+		GLfloat pSpeed = 1.0f;
 		if(!gParticles[i].init(CPos(0,0,0), // Position
 			CVector(RAND(-pSpeed, pSpeed), RAND(0, pSpeed), RAND(-pSpeed, pSpeed)), // Velocity
 			RAND(0.0f, 2.0f), // Lifespan
-			0.5f, // Size 
+			1.0f, // Size 
 			30.0f, // UV rotation angle
-			ARGB(255, 115, 115, 200), // Color
 			"particle.bmp")) // Texture name
 		{
 			ReleaseDC(hWnd, hdc);

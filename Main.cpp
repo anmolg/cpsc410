@@ -156,9 +156,10 @@ void Init(HWND hWnd)
 void initVersions() {
 	// Testing data
 		XMLParser xmlParser = XMLParser();
-	for (int i=1;i<123;i++) {
+	for (int i=1;i<15;i++) {
 		xmlParser.parse(i,version);
 		_RPT1( 0, "initVersions : %i\n", i);
+
 		if(i==30){
 			for (int j=0;j<version.childPackages.size();j++){
 				_RPT1(0, "package: %i\n",j);
@@ -166,9 +167,9 @@ void initVersions() {
 					int boolNum =0;
 					//if (k,version.childPackages[j].childClasses[k].alive) boolNum=1;
 					_RPT2(0, "	class: %i	size: %i\n",k,version.childPackages[j].childClasses[k].size[i]);
-//					for(int l=0; l<version.childPackages[j].childClasses[k].size.size();l++){
-	//					_RPT2(0, "		size[%i]: %i\n",l,version.childPackages[j].childClasses[k].size[l]);
-		//			}
+					//for(int l=0; l<version.childPackages[j].childClasses[k].size.size();l++){
+					//	_RPT2(0, "		size[%i]: %i\n",l,version.childPackages[j].childClasses[k].size[l]);
+					//}
 					for (int l=0;  l<version.childPackages[j].childClasses[k].childMethods.size();l++){
 						_RPT2(0,"		method: %i end time:%i\n",l,version.childPackages[j].childClasses[k].childMethods[l].endTime);
 						for (int m =0; m< version.childPackages[j].childClasses[k].childMethods[l].duplications.size();m++){

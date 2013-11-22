@@ -73,15 +73,12 @@ void drawSphere(float sphereRadius, float orbitRadius, float orbitSpeed, Celesti
 	float sfactor = psize/100.0;
 	glScalef(sfactor,sfactor,sfactor);
 	if (psize < 100) {
-		glColor3f(1,0,0);
+		glColor3f(0,1,0);
 		psize++;
 	}
 
-	if (type == BURNING) drawBurningMoon();
-	else {
-		gluSphere(pObj, sphereRadius, 24, 24);
+	gluSphere(pObj, sphereRadius, 24, 24);
 
-	}
 	glPopMatrix();
 }
 
@@ -96,31 +93,26 @@ void drawMethod(GMethod& gm, int index,float p_radius) {
 	//float randomZ = rand()%100/100.0;
 	glRotatef(index*60,1,0,0); // arbitrary angles of rotation.
 	glPushMatrix();
-	//drawBurningMoon();
-	glPopMatrix();
-	if (gm.duplications[min(commitNumber,gm.duplications.size()-1)]) {
 
-	drawSphere(	MOON_RADIUS,
-		p_radius + index*MOON_DISTANCE,
-		MOON_BASE_ORBIT_SPEED/sqrt((double) index),
-		BURNING,
-		gm.psize); // Last parameter just for testing
-	}
-	else {
-	glColor3f(1,1,1);
 	drawSphere(	MOON_RADIUS,
 		p_radius + index*MOON_DISTANCE,
 		MOON_BASE_ORBIT_SPEED/sqrt((double) index),
 		MOON,
 		gm.psize); // Last parameter just for testing
-
+	if (gm.duplications[min(commitNumber,gm.duplications.size()-1)]) {
+		if (gm.psize < 100) glColor3f(1,0,0);
+		else glColor3f(1,1,0);
+		drawBurningMoon();
 	}
+	glPopMatrix();
 }
 
 void drawClass(GClass& gc,int index) {
 	if (commitNumber<gc.creationTime) return;
-	glColor3f(0,1,0); // TODO : set colour corresponding to author commits.
+
+	glColor3f(0,0,1); // TODO : set colour corresponding to author commits.
 	int sizeIndex = (int) min(commitNumber,gc.size.size()-1);
+	if (gc.size[sizeIndex] == 0) return;
 	float radius = PLANET_RADIUS + pow((double)gc.size[sizeIndex]/20,(double)1/3);
 	//the volume propotional to line of code in a class, there for the radius is cube root
 	drawSphere( radius,
