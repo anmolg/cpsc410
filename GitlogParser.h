@@ -11,8 +11,8 @@
 class GitlogParser {
 
 public:
-	XMLParser() {};
-	~XMLParser() {};
+	GitlogParser() {};
+	~GitlogParser() {};
 
 
 	// parse a file and write the output in the vectors
