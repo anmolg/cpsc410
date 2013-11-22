@@ -16,7 +16,7 @@ public:
 
 
 	// parse a file and write the output in the vectors
-	bool parse( int filename, GVersion &version);
+	bool glparse( int filename, GVersion &version);
 
 
 };

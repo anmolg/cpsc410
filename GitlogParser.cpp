@@ -1,30 +1,25 @@
 #include "GitlogParser.h"
 using namespace std;
 
-void preparse(GVersion &version);
-bool realParse(	int filename);
-void update(GVersion &version, int versionNumber);
-void postparse(GVersion &version, int versionNumber);
+void gpreparse(GVersion &version);
+bool grealParse(	int filename);
+void gupdate(GVersion &version, int versionNumber);
+//void postparse(GVersion &version, int versionNumber);
 
-struct GClone{
-	int parentClassID;
-	int parentMethodID;
-};
+
 string toString(double number);
-vector<GClass> tempClasses;
-vector<GMethod> tempMethods;
-vector<GPackage> tempPackages;
-vector<GClone> tempClones;
+//vector<GClass> tempClasses;
+//vector<GMethod> tempMethods;
+//vector<GPackage> tempPackages;
 int versionNumber = 0;
-bool GitlogParser::parse(int filename, GVersion &version){
+bool GitlogParser::glparse(int filename, GVersion &version){
 	// clear the temp vectors at the start of parsing.
-	tempClasses.clear();
-	tempPackages.clear();
-	tempClones.clear();
+	//tempClasses.clear();
+	//tempPackages.clear();
 
 	// if version is not empty, do parsing preparations.
-	preparse(version);
-	realParse(filename);
+	gpreparse(version);
+	grealParse(filename);
 	//update(version, filename);
 	//postparse(version, filename);
 	return true;
@@ -41,7 +36,7 @@ str: input line of XML file
 //getNumber("			<METHODNAME>_init_</METHODNAME>","METHODNAME") = -1
 //getNumber("			<METHODFROMLINE>22</METHODFROMLINE>","METHODFROMLINE") = 22
 
-int getNumber(string str, string keyword)
+int ggetNumber(string str, string keyword)
 {
 	string new_str;
 	size_t index = 0;
@@ -81,19 +76,6 @@ int getNumber(string str, string keyword)
 	return result;
 }
 
-/*return a method name given an XML line,
-or and empty string if that's a wrong line.
-*/
-// getMethodName("			<METHODNAME>_init_</METHODNAME>") = "_init_"
-
-string getMethodName(string str){
-	string result="";
-	if ((str.substr(0,15)=="			<METHODNAME>" )&&(str.substr(str.size()-13)=="</METHODNAME>" )){
-		result=str.substr(15,str.size()-28);
-		//cout<<result<<endl;
-	}
-	return result;
-}
 /*get class name ANNNNND package name from FILEPATH
 return:
 a 2-element vector of string: ["fileName","pakageName"]
@@ -103,7 +85,7 @@ str: input line of XML file
 */
 //getGClassName("			<FILEPATH>C:\Users\Jimmy\Desktop\versions\TEST\testfile\ClerkFrame.java</FILEPATH>") = 
 // vector<> = {"ClerkFrame","testfile"}
-vector<string> getGClassName(string str){
+vector<string> ggetGClassName(string str){
 	vector<string> result(2,"");//default case
 	int i =str.size();
 	if (i>16){
@@ -146,7 +128,7 @@ vector<string> getGClassName(string str){
 </FILE>		return -1:end
 */
 
-int flagTrigger(string str, string keyword){
+int gflagTrigger(string str, string keyword){
 	size_t index = 0;
 	int numLength =0;
 	int result =-1;
@@ -164,7 +146,7 @@ int flagTrigger(string str, string keyword){
 	return 0;//default
 }
 
-bool realParse(int filename) //filename is the version number
+bool grealParse(int filename) //filename is the version number
 {	string line, targetString, s;
 	s = toString(filename);
 	//cout <<s.c_str()<<endl;
@@ -182,11 +164,11 @@ bool realParse(int filename) //filename is the version number
 		int iClass = 0;
 		GClass tempC;
 		GMethod tempM;
-		GClone tempCl;
+		//GClone tempCl;
 		while ( file.good() )
 		{
 			getline (file,line);
-			if (flagTrigger(line, "Author: Anmol")==1){
+			if (gflagTrigger(line, "Author: Anmol")==1){
 				authorAnmol = true;
 				authorJimmy = false;
 				authorShirley = false;
@@ -194,7 +176,7 @@ bool realParse(int filename) //filename is the version number
 				//tempC = GClass( filename);
 				//tempC.alive = true;
 			}
-			else if(flagTrigger(line, "Author: Jimmy")==-1){
+			else if(gflagTrigger(line, "Author: Jimmy")==-1){
 				authorAnmol = false;
 				authorJimmy = true;
 				authorShirley = false;
@@ -203,7 +185,7 @@ bool realParse(int filename) //filename is the version number
 				//tempClasses.push_back (tempC);
 			}
 
-			else if (flagTrigger(line, "Author: xueqixu")==1){
+			else if (gflagTrigger(line, "Author: xueqixu")==1){
 				authorAnmol = false;
 				authorJimmy = false;
 				authorShirley = true;
@@ -213,18 +195,20 @@ bool realParse(int filename) //filename is the version number
 				//tempM.alive =true;
 
 			}
+			/*
 			else if(flagTrigger(line,"METHOD")==-1){
 				isCheckingMethod = false;
 				tempMethods.push_back(tempM);
 			}
 			else if(flagTrigger(line,"CLONE")==1){
 				isCheckingClone = true;
-				tempCl=GClone();
+				//tempCl=GClone();
 			}
+			*/
 			//-----------------------parse class stuff---------------------------
 			if(authorAnmol){
-				if (getGClassName(line)[0] != ""){
-					string currentClassName = getGClassName(line)[0];
+				if (ggetGClassName(line)[0] != ""){
+					string currentClassName = ggetGClassName(line)[0];
 					for (int i = 0; i < GVersion(versionNumber).childPackages.size(); i++) {
 						for (int j = 0; j < GVersion(versionNumber).childPackages[i].childClasses.size(); j++) {
 							if (GVersion(versionNumber).childPackages[i].childClasses[j].className == currentClassName) {
@@ -250,8 +234,8 @@ bool realParse(int filename) //filename is the version number
 				}
 			}
 			else if(authorJimmy){
-				if (getGClassName(line)[0] != ""){
-					string currentClassName = getGClassName(line)[0];
+				if (ggetGClassName(line)[0] != ""){
+					string currentClassName = ggetGClassName(line)[0];
 					for (int i = 0; i < GVersion(versionNumber).childPackages.size(); i++) {
 						for (int j = 0; j < GVersion(versionNumber).childPackages[i].childClasses.size(); j++) {
 							if (GVersion(versionNumber).childPackages[i].childClasses[j].className == currentClassName) {
@@ -277,8 +261,8 @@ bool realParse(int filename) //filename is the version number
 				}
 			}
 			else if(authorShirley){
-				if (getGClassName(line)[0] != ""){
-					string currentClassName = getGClassName(line)[0];
+				if (ggetGClassName(line)[0] != ""){
+					string currentClassName = ggetGClassName(line)[0];
 					for (int i = 0; i < GVersion(versionNumber).childPackages.size(); i++) {
 						for (int j = 0; j < GVersion(versionNumber).childPackages[i].childClasses.size(); j++) {
 							if (GVersion(versionNumber).childPackages[i].childClasses[j].className == currentClassName) {
@@ -319,7 +303,7 @@ bool realParse(int filename) //filename is the version number
 
 
 
-void preparseClass(GClass &c){
+void gpreparseClass(GClass &c){
 	c.alive =false;
 	for (int i= 0; i<c.childMethods.size();i++){
 		//preparseMethod(c.childMethods[i]);
@@ -335,16 +319,16 @@ void preparseClass(GClass &c){
 	}
 }
 
-void preparsePackage(GPackage &p){
+void gpreparsePackage(GPackage &p){
 	p.alive =false;
 	for (int i= 0; i<p.childClasses.size();i++){
-		preparseClass(p.childClasses[i]);
+		gpreparseClass(p.childClasses[i]);
 	}
 }
 
-void preparse(GVersion &v){
+void gpreparse(GVersion &v){
 	for (int i= 0; i<v.childPackages.size();i++){
-		preparsePackage(v.childPackages[i]);
+		gpreparsePackage(v.childPackages[i]);
 	}
 }
 
