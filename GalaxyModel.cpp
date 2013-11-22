@@ -25,7 +25,7 @@ void setStarLocation(int index) {
 
 // Loads the textures 
 void loadgalaxytextures(){
-	CreateTexture(galaxy_texture[0],"Resources/textures/Sun.bmp");
+	CreateTexture(galaxy_texture[0],"Resources/textures/ModelSun.bmp");
 	CreateTexture(galaxy_texture[1],"Resources/textures/Moon.bmp");
 	CreateTexture(galaxy_texture[2],"Resources/textures/Planet.bmp");
 }
