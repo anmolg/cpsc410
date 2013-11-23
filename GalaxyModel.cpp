@@ -9,9 +9,10 @@
 #define PLANET_DISTANCE 30
 #define MOON_RADIUS 0.5
 #define MOON_DISTANCE 0.5
-#define STAR_DISTANCE 30
+#define STAR_DISTANCE 40
 #define MOON_BASE_ORBIT_SPEED 3.0 
 #define PLANET_BASE_ORBIT_SPEED 1.0 
+#define END_TIMER 150.0
 
 float dt = 1.0f / 200.0f;
 UINT galaxy_texture[50];
@@ -81,7 +82,7 @@ void drawSphere(float sphereRadius, float orbitRadius, float orbitSpeed, Celesti
 	gluQuadricTexture(pObj, 1);						// This turns on texture coordinates for our Quadrics
 	gluQuadricNormals(pObj, GLU_SMOOTH);
 
-	if (psize < 100) psize++;
+	if (psize < END_TIMER) psize++;
 
 	if (type == STAR){
 		if (currentPackageName == "ui"){
@@ -94,11 +95,11 @@ void drawSphere(float sphereRadius, float orbitRadius, float orbitSpeed, Celesti
 		glBindTexture(GL_TEXTURE_2D, galaxy_texture[6]);}
 	}
 	else if (type == MOON){
-		if (psize < 100) glBindTexture(GL_TEXTURE_2D, galaxy_texture[7]);
+		if (psize < END_TIMER) glBindTexture(GL_TEXTURE_2D, galaxy_texture[7]);
 		else glBindTexture(GL_TEXTURE_2D, galaxy_texture[1]);
 	}	
 	else if (type == PLANET){
-		if (psize < 100) glBindTexture(GL_TEXTURE_2D, galaxy_texture[7]);
+		if (psize < END_TIMER) glBindTexture(GL_TEXTURE_2D, galaxy_texture[7]);
 		else glBindTexture(GL_TEXTURE_2D, galaxy_texture[2]);
 	}	
 
@@ -107,7 +108,7 @@ void drawSphere(float sphereRadius, float orbitRadius, float orbitSpeed, Celesti
 	glPushMatrix();
 	glRotatef(60*g_time, 0, -1, 0);			// Rotate the sphere around itself to produce the spin
 
-	float sfactor = psize/100.0;
+	float sfactor = psize/END_TIMER;
 	glScalef(sfactor,sfactor,sfactor);
 
 	gluSphere(pObj, sphereRadius, 24, 24);
@@ -121,10 +122,9 @@ void drawMethod(GMethod& gm, int index,float p_radius) {
 	if (commitNumber < gm.creationTime) return;
 	if (commitNumber >= gm.endTime) return;
 	glColor3f(1,1,1);
-	//int randomAngle = rand()%360; // THIS DID NOT WORK BECUZ IT GENERATES RANDOM STUFF EVERY TIME
-	//float randomX = rand()%100 / 100.0;
-	//float randomZ = rand()%100/100.0;
-	glRotatef(index*60,1,0,0); // arbitrary angles of rotation.
+
+	glRotatef(gm.angle,1,0,0); // angle of rotation.
+	
 	glPushMatrix();
 
 	drawSphere(	MOON_RADIUS,
@@ -133,7 +133,7 @@ void drawMethod(GMethod& gm, int index,float p_radius) {
 		MOON,
 		gm.psize); // Last parameter just for testing
 	if (gm.duplications[(int) min(commitNumber,gm.duplications.size()-1)]) {
-		if (gm.p_timer < 100) { gm.p_timer++;drawBurningMoon();}
+		if (gm.p_timer < END_TIMER) { gm.p_timer++;drawBurningMoon();}
 		else drawYellowBurningMoon();
 		
 	}
@@ -169,6 +169,7 @@ void drawPackage(GPackage& gp,int p_index) {
 	glColor3f(1,0.84,0);
 
 	currentPackageName = gp.packageName;
+	if (commitNumber > 15) glScalef(10,10,10);
 	drawSphere(STAR_RADIUS,0,0,STAR,gp.psize);
 
 	int index = 1;

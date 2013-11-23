@@ -25,12 +25,9 @@ GLfloat ambientColor[] = {0.2f, 0.2f, 0.2f, 1.0f};
     GLfloat lightPos3[] = {0.0f, -45.0f, 0.0f, 1.0f}; //Positioned at (4, 0, 8)
 
 GVersion version = GVersion(0);
-float COMMIT_TIME_INTERVAL = 1.0;
+float COMMIT_TIME_INTERVAL = 4.0;
 
 float commitNumber;
-
-
-
 #define BACK_ID		0									// The texture ID for the back side of the cube
 #define FRONT_ID	1									// The texture ID for the front side of the cube
 #define BOTTOM_ID	2									// The texture ID for the bottom side of the cube
@@ -304,11 +301,11 @@ glEnable(GL_LIGHT5);
 	}
 	
 	glColor3f(1,1,1);
-	CreateSkyBox(0, 0, 0, 300, 150, 300);
-	
+
 	glDisable(GL_LIGHTING);
 	drawhud(version, (int)commitNumber);
 	
+	// CreateSkyBox(0, 0, 0, 300, 150, 300);
 	// Swap the backbuffers to the foreground
 	SwapBuffers(g_hDC);									
 }

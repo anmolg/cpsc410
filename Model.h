@@ -107,7 +107,11 @@ class GMethod {
 public:
 
 	GMethod(){}
-	GMethod(int ct){creationTime = ct; endTime = 2147483647;psize = 0;p_timer=0;}
+	GMethod(int ct){creationTime = ct; 
+				endTime = 2147483647;
+				psize = 0;
+				p_timer=0;
+				angle = rand()%360;}
 	~GMethod(){}
 	int newID();							// 
 
@@ -122,6 +126,7 @@ public:
 	bool alive;
 	int psize;
 	int p_timer;			// timer for particles
+	int angle;				// angle between rotation plane and the x-z plane
 	
 };
 
