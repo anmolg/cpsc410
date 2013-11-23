@@ -1,3 +1,5 @@
+// Citation : gametutorials.com
+
 #ifndef _MAIN_H
 #define _MAIN_H
 
@@ -21,10 +23,9 @@
 #define SCREEN_DEPTH 16									// We want 16 bits per pixel
 #define MAX_PARTICLES 64
 
-extern float g_time;
-extern float commitNumber;
+extern float g_time;						// The global time variable
+extern float commitNumber;					// to get the integer commit number, do (int)
 extern CParticle gParticles[MAX_PARTICLES]; // An array of particles
-extern vector<CParticle> particles;
 
 
 // This is our basic 3D point/vector class
@@ -114,7 +115,6 @@ void RenderScene();
 
 // This frees all our memory in our program
 void DeInit();
-
 
 // This loads a texture into openGL from a file (IE, "bitmap.bmp")
 bool CreateTexture(GLuint &textureID, LPTSTR szFileName);

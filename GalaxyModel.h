@@ -10,23 +10,25 @@
 #include "GalaxyModel.h"
 #include "Model.h"
 
-#define STAR_RADIUS 2
-#define PLANET_RADIUS 1
-#define PLANET_DISTANCE 5
-#define MOON_RADIUS 0.5
-#define MOON_DISTANCE 1
-
+// This is used to determine texturing for drawing spheres
 enum CelestialType{STAR,PLANET,MOON,BURNING};
 
+// Draws a sphere that takes in arguments for the radius
+// the orbital radius
+// the orbital speed (angular speed, degrees/time)
+// psize is a timer for determining the radius of the sphere
 void drawSphere(float sphereRadius, float orbitRadius, float orbitSpeed, int& psize);
 
+// Draws Moons
 void drawMethod(GMethod& gm, int index,float p_radius);
 
+// Draws planets
 void drawClass(GClass& gc,int index);
 
+// Draws stars
 void drawPackage(GPackage& gp,int index);
 
-//hold galaxy textures
+//holds galaxy textures
 void loadgalaxytextures();
 
 

@@ -274,7 +274,7 @@ void RenderScene()
 	}
 	
 	glColor3f(1,1,1);
-	//CreateSkyBox(0, 0, 0, 300, 150, 300);
+	CreateSkyBox(0, 0, 0, 300, 150, 300);
 	// Swap the backbuffers to the foreground
 	SwapBuffers(g_hDC);									
 }

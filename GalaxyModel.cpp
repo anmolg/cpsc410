@@ -36,7 +36,7 @@ void loadgalaxytextures(){
 	CreateTexture(galaxy_texture[6],"Resources/textures/JDBCSun.bmp");
 }
 
-// 
+// draw particles for burning moons
 void drawBurningMoon() {
 	for(int i = 0; i < MAX_PARTICLES; ++i)
 	{
