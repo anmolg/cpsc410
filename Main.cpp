@@ -184,16 +184,15 @@ void initVersions() {
 			}
 		}
 	}
-	//GitlogParser glParser = GitlogParser();
-	//glParser.glparse(version);
-	//_RPT0(0,"thei\n");
-	//_RPT1(0,"SIZE OF AUTHERS' VECTOR: %i",version.authors.size()); 
-	//for (int authorsN = 0; authorsN < version.authors.size(); authorsN++) {
-		//int jimmy = version.authors[authorsN].author_j;
-		//int anmol = version.authors[authorsN].author_a;
-		//int shirley = version.authors[authorsN].author_s;
-		//_RPT4(0, "version: %i, a:%i 	j:%i	s:%i\n",authorsN, jimmy, anmol, shirley);
-	//}
+	GitlogParser glParser = GitlogParser();
+	glParser.glparse(version);
+	_RPT1(0,"SIZE OF AUTHERS' VECTOR: %i",version.authors.size()); 
+	for (int authorsN = 0; authorsN < version.authors.size(); authorsN++) {
+		int jimmy = version.authors[authorsN].author_j;
+		int anmol = version.authors[authorsN].author_a;
+		int shirley = version.authors[authorsN].author_s;
+		_RPT4(0, "version: %i, a:%i 	j:%i	s:%i\n",authorsN, anmol, jimmy, shirley);
+	}
 }
 
 /////////////////////////////// ANIMATE NEXT FRAME \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
