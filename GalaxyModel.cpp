@@ -16,6 +16,8 @@
 float dt = 1.0f / 200.0f;
 UINT galaxy_texture[50];
 
+string currentPackageName;
+
 // Sets the star's location in a linear fashion.
 void setStarLocation(int index) {
 	if (index == 4) return;
@@ -49,6 +51,10 @@ void drawSphere(float sphereRadius, float orbitRadius, float orbitSpeed, Celesti
 	gluQuadricNormals(pObj, GLU_SMOOTH);
 
 	if (type == STAR){
+		if (currentPackageName == "ui"){}
+		if (currentPackageName == "transactions"){}
+		if (currentPackageName == ".."){}
+		if (currentPackageName == "ui"){}
 		glBindTexture(GL_TEXTURE_2D, galaxy_texture[0]);	
 	}
 	else if (type == MOON){
@@ -126,6 +132,7 @@ void drawPackage(GPackage& gp,int p_index) {
 	setStarLocation(p_index);				// set star location
 	glColor3f(1,0.84,0);
 
+	currentPackageName = gp.packageName;
 	drawSphere(STAR_RADIUS,0,0,STAR,gp.psize);
 
 	int index = 1;
