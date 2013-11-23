@@ -9,6 +9,7 @@ using std::ifstream;
 
 #include <cstring>
 #include "Model.h"
+#include "GitlogParser.h"
 
 const int MAX_CHARS_PER_LINE = 512;
 const int MAX_TOKENS_PER_LINE = 20;
@@ -20,10 +21,10 @@ int jimmyTimes = 0;
 int shirleyTimes = 0;
 int versionNumber = 0;
 
-int gitlogParser(GVersion &version);
+//bool glParser(GVersion &version);
 
 
-int main(GVersion &version) {
+/*int main(GVersion &version) {
 	
 	Authors start;
 	start.author_a = 0;
@@ -35,13 +36,20 @@ int main(GVersion &version) {
 	gitlogParser(version);
 	cout << "Anmol: " << anmolTimes << endl;
 	cout << "Jimmy: " << jimmyTimes << endl;
-	cout << "Shirley: " << shirleyTimes << endl;
+	cout nt "Shirley: " << shirleyTimes << endl;
  
 	return 0;
 
 }
-int gitlogParser(GVersion &version)
+*/
+int GitlogParser::glparse(GVersion &version)
 {
+	Authors start;
+	start.author_a = 0;
+	start.author_j = 0;
+	start.author_s = 0;
+
+	version.authors.push_back(start);
   // create a file-reading object
   ifstream fin;
   fin.open("log.txt"); // open a file
@@ -77,6 +85,8 @@ int gitlogParser(GVersion &version)
 		tok = token[1];
 		const char * anmol = "Anmol";
 		const char * jimmy = "Jimmy";
+		const char * jimmyPart2 = "jimmy.gnahz";
+		const char * jimmyPart3 = "jimmy-gnahz";
 		const char * shirley = "xueqixu";
 		int compAnmol = strcmp (tok, anmol);
 		if (compAnmol == 0) {
@@ -87,7 +97,9 @@ int gitlogParser(GVersion &version)
 		}
 		
 		int compJimmy = strcmp (tok, jimmy);
-		if (compJimmy == 0) {
+		int compJimmyP = strcmp (tok, jimmyPart2);
+		int compJimmyP2 = strcmp (tok, jimmyPart3);
+		if (compJimmy == 0 || compJimmyP == 0 || compJimmyP2 == 0) {
 			Authors old = version.authors[versionNumber];
 			old.author_j++;
 			version.authors.push_back(old);
@@ -107,5 +119,5 @@ int gitlogParser(GVersion &version)
 
   }
 
- 
+ return 0;
 }
