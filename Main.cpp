@@ -136,12 +136,12 @@ void Init(HWND hWnd)
 	InitializeOpenGL(g_rRect.right, g_rRect.bottom);	// Init OpenGL with the global rect
 	initVersions();
 
-	CreateTexture(g_Texture[BACK_ID], "Back.bmp");
-	CreateTexture(g_Texture[FRONT_ID], "Front.bmp");
-	CreateTexture(g_Texture[BOTTOM_ID], "Bottom.bmp");
-	CreateTexture(g_Texture[TOP_ID], "Top.bmp");
-	CreateTexture(g_Texture[LEFT_ID], "Left.bmp");
-	CreateTexture(g_Texture[RIGHT_ID], "Right.bmp");
+	CreateTexture(g_Texture[BACK_ID], "Resources/textures/Back.bmp");
+	CreateTexture(g_Texture[FRONT_ID], "Resources/textures/Front.bmp");
+	CreateTexture(g_Texture[BOTTOM_ID], "Resources/textures/Bottom.bmp");
+	CreateTexture(g_Texture[TOP_ID], "Resources/textures/Top.bmp");
+	CreateTexture(g_Texture[LEFT_ID], "Resources/textures/Left.bmp");
+	CreateTexture(g_Texture[RIGHT_ID], "Resources/textures/Right.bmp");
 	// Init our camera position
 	srand (time(NULL));
 						// Position        View		   Up Vector
@@ -274,7 +274,7 @@ void RenderScene()
 	}
 	
 	glColor3f(1,1,1);
-	//CreateSkyBox(0, 0, 0, 300, 150, 300);
+	CreateSkyBox(0, 0, 0, 300, 150, 300);
 	// Swap the backbuffers to the foreground
 	SwapBuffers(g_hDC);									
 }
