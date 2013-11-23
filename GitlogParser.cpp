@@ -2,7 +2,7 @@
 using namespace std;
 
 void gpreparse(GVersion &version);
-bool grealParse(	int filename);
+bool grealParse(GVersion &version);
 void gupdate(GVersion &version, int versionNumber);
 //void postparse(GVersion &version, int versionNumber);
 
@@ -12,14 +12,18 @@ string toString(double number);
 //vector<GMethod> tempMethods;
 //vector<GPackage> tempPackages;
 int versionNumber = 0;
-bool GitlogParser::glparse(int filename, GVersion &version){
+	bool authorAnmol = false;
+	bool authorJimmy = false;
+	bool authorShirley = false;
+
+bool GitlogParser::glparse(GVersion &version){
 	// clear the temp vectors at the start of parsing.
 	//tempClasses.clear();
 	//tempPackages.clear();
 
 	// if version is not empty, do parsing preparations.
-	gpreparse(version);
-	grealParse(filename);
+	//gpreparse(version);
+	grealParse(version);
 	//update(version, filename);
 	//postparse(version, filename);
 	return true;
@@ -146,24 +150,21 @@ int gflagTrigger(string str, string keyword){
 	return 0;//default
 }
 
-bool grealParse(int filename) //filename is the version number
-{	string line, targetString, s;
-	s = toString(filename);
+bool grealParse(GVersion &version) //filename is the version number
+{	string line, targetString;
+//	s = toString(filename);
 	//cout <<s.c_str()<<endl;
-	ifstream file (s.c_str());
+	ifstream file ("gitlog.txt");
 
 	bool isCheckingFile = false;	// file lines trigger
 	bool isCheckingMethod = false;	// method lines trigger
 	bool isCheckingClone = false;	// clone lines trigger
-	bool authorAnmol = false;
-	bool authorJimmy = false;
-	bool authorShirley = false;
+
 
 	if (file.is_open())
 	{
 		int iClass = 0;
-		GClass tempC;
-		GMethod tempM;
+		Authors tempA;
 		//GClone tempCl;
 		while ( file.good() )
 		{
@@ -173,6 +174,23 @@ bool grealParse(int filename) //filename is the version number
 				authorJimmy = false;
 				authorShirley = false;
 				versionNumber++;
+				for (int i = 0; i < version.childPackages.size(); i++) {
+					for (int j = 0; j < version.childPackages[i].childClasses.size(); j++) {
+						
+						if (j == 0) {
+							Authors tempA;
+							tempA.author_a = 0;
+							tempA.author_j = 0;
+							tempA.author_s = 0;
+							version.childPackages[i].childClasses[j].authors.push_back(tempA);
+						}
+						else {
+							Authors tempA = version.childPackages[i].childClasses[j].authors[j-1];
+							version.childPackages[i].childClasses[j].authors.push_back(tempA);
+					
+						}
+					}
+				}
 				//tempC = GClass( filename);
 				//tempC.alive = true;
 			}
@@ -209,11 +227,11 @@ bool grealParse(int filename) //filename is the version number
 			if(authorAnmol){
 				if (ggetGClassName(line)[0] != ""){
 					string currentClassName = ggetGClassName(line)[0];
-					for (int i = 0; i < GVersion(versionNumber).childPackages.size(); i++) {
-						for (int j = 0; j < GVersion(versionNumber).childPackages[i].childClasses.size(); j++) {
-							if (GVersion(versionNumber).childPackages[i].childClasses[j].className == currentClassName) {
-								vector<Authors> tempAuthor = GVersion(versionNumber).childPackages[i].childClasses[j].authors;
-								GVersion(versionNumber).childPackages[i].childClasses[j].authors[versionNumber].author_a++; // finding the corresponding vector to the versionNumber, and updating it by the number
+					for (int i = 0; i < version.childPackages.size(); i++) {
+						for (int j = 0; j < version.childPackages[i].childClasses.size(); j++) {
+							if (version.childPackages[i].childClasses[j].className == currentClassName) {
+								version.childPackages[i].childClasses[j].authors[versionNumber].author_a++;
+								//version.childPackages[i].childClasses[j].authors.push_back(oldAuthor); // finding the corresponding vector to the versionNumber, and updating it by the number
 								//int anmolCount = tempAuthor[versionNumber].author_a;
 								//int jimmyCount = tempAuthor[versionNumber].author_j;
 								//int shirleyCount = tempAuthor[versionNumber].author_s;
@@ -236,11 +254,11 @@ bool grealParse(int filename) //filename is the version number
 			else if(authorJimmy){
 				if (ggetGClassName(line)[0] != ""){
 					string currentClassName = ggetGClassName(line)[0];
-					for (int i = 0; i < GVersion(versionNumber).childPackages.size(); i++) {
-						for (int j = 0; j < GVersion(versionNumber).childPackages[i].childClasses.size(); j++) {
-							if (GVersion(versionNumber).childPackages[i].childClasses[j].className == currentClassName) {
-								vector<Authors> tempAuthor = GVersion(versionNumber).childPackages[i].childClasses[j].authors;
-								GVersion(versionNumber).childPackages[i].childClasses[j].authors[versionNumber].author_j++; // finding the corresponding vector to the versionNumber, and updating it by the number
+					for (int i = 0; i < version.childPackages.size(); i++) {
+						for (int j = 0; j < version.childPackages[i].childClasses.size(); j++) {
+							if (version.childPackages[i].childClasses[j].className == currentClassName) {
+								version.childPackages[i].childClasses[j].authors[versionNumber].author_j++;
+								//version.childPackages[i].childClasses[j].authors.push_back(oldAuthor); // finding the corresponding vector to the versionNumber, and updating it by the number
 								//int anmolCount = tempAuthor[versionNumber].author_a;
 								//int jimmyCount = tempAuthor[versionNumber].author_j;
 								//int shirleyCount = tempAuthor[versionNumber].author_s;
@@ -263,11 +281,11 @@ bool grealParse(int filename) //filename is the version number
 			else if(authorShirley){
 				if (ggetGClassName(line)[0] != ""){
 					string currentClassName = ggetGClassName(line)[0];
-					for (int i = 0; i < GVersion(versionNumber).childPackages.size(); i++) {
-						for (int j = 0; j < GVersion(versionNumber).childPackages[i].childClasses.size(); j++) {
-							if (GVersion(versionNumber).childPackages[i].childClasses[j].className == currentClassName) {
-								vector<Authors> tempAuthor = GVersion(versionNumber).childPackages[i].childClasses[j].authors;
-								GVersion(versionNumber).childPackages[i].childClasses[j].authors[versionNumber].author_s++; // finding the corresponding vector to the versionNumber, and updating it by the number
+					for (int i = 0; i < version.childPackages.size(); i++) {
+						for (int j = 0; j < version.childPackages[i].childClasses.size(); j++) {
+							if (version.childPackages[i].childClasses[j].className == currentClassName) {
+								version.childPackages[i].childClasses[j].authors[versionNumber].author_s++;
+								//version.childPackages[i].childClasses[j].authors.push_back(oldAuthor); // finding the corresponding vector to the versionNumber, and updating it by the number
 								//int anmolCount = tempAuthor[versionNumber].author_a;
 								//int jimmyCount = tempAuthor[versionNumber].author_j;
 								//int shirleyCount = tempAuthor[versionNumber].author_s;
@@ -312,9 +330,9 @@ void gpreparseClass(GClass &c){
 		temp.author_j = 0;
 		temp.author_s = 0;
 
-		for (int j = 0; j < 123; j++) {
-			c.authors.push_back(temp); // 123 commits, so pushing back a vector for each value
-		}
+		//for (int j = 0; j < 123; j++) {
+			//c.authors.push_back(temp); // 123 commits, so pushing back a vector for each value
+		//}
 
 	}
 }

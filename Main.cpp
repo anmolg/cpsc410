@@ -157,7 +157,7 @@ void initVersions() {
 	for (int i=1;i<15;i++) {
 		xmlParser.parse(i,version);
 		_RPT1( 0, "initVersions : %i\n", i);
-
+		
 		if(i==121){
 			for (int j=0;j<version.childPackages.size();j++){
 				_RPT1(0, "package: %i\n",j);
@@ -180,6 +180,9 @@ void initVersions() {
 			}
 		}
 	}
+	//GitlogParser glParser = GitlogParser();
+
+	//glParser.glparse(version);
 }
 
 /////////////////////////////// ANIMATE NEXT FRAME \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
