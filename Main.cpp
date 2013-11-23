@@ -303,7 +303,7 @@ glEnable(GL_LIGHT5);
 	glColor3f(1,1,1);
 
 	glDisable(GL_LIGHTING);
-	drawhud(version, (int)commitNumber);
+	drawhud(version, min((int)commitNumber,version.authors.size()));
 	
 	// CreateSkyBox(0, 0, 0, 300, 150, 300);
 	// Swap the backbuffers to the foreground

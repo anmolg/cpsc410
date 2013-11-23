@@ -89,30 +89,34 @@ void drawhud(GVersion &version, int versionnum){
 	glEnd();
 
 
-
+	double scale = .99-.17;
+	double a=(double)version.authors[versionnum].author_a;
+	double j=(double)version.authors[versionnum].author_j;
+	double s=(double)version.authors[versionnum].author_s;
+	double sum=(double)version.authors.size();
 	//jimmy
 	glBindTexture(GL_TEXTURE_2D, hudtexture[2]);
 	glBegin(GL_QUADS);
-	glTexCoord2f(0,1);	glVertex2f(0, SCREEN_HEIGHT*.05);
-	glTexCoord2f(1,1);	glVertex2f(0, SCREEN_HEIGHT*.09);
-	glTexCoord2f(1,0);	glVertex2f(SCREEN_WIDTH, SCREEN_HEIGHT*.09);
-	glTexCoord2f(0,0);	glVertex2f(SCREEN_WIDTH, SCREEN_HEIGHT*.05);
+	glTexCoord2f(0,1);	glVertex2f(SCREEN_WIDTH*.17, SCREEN_HEIGHT*.05);
+	glTexCoord2f(1,1);	glVertex2f(SCREEN_WIDTH*.17, SCREEN_HEIGHT*.09);
+	glTexCoord2f(1,0);	glVertex2f(SCREEN_WIDTH*(.17+scale*j/sum), SCREEN_HEIGHT*.09);
+	glTexCoord2f(0,0);	glVertex2f(SCREEN_WIDTH*(.17+scale*j/sum), SCREEN_HEIGHT*.05);
 	glEnd();
 	//anmol
 		glBindTexture(GL_TEXTURE_2D, hudtexture[1]);
 	glBegin(GL_QUADS);
-	glTexCoord2f(0,1);	glVertex2f(0, 0);
-	glTexCoord2f(1,1);	glVertex2f(0, SCREEN_HEIGHT*.049);
-	glTexCoord2f(1,0);	glVertex2f(SCREEN_WIDTH, SCREEN_HEIGHT*.049);
-	glTexCoord2f(0,0);	glVertex2f(SCREEN_WIDTH, 0);
+	glTexCoord2f(0,1);	glVertex2f(SCREEN_WIDTH*.17, 0);
+	glTexCoord2f(1,1);	glVertex2f(SCREEN_WIDTH*.17, SCREEN_HEIGHT*.049);
+	glTexCoord2f(1,0);	glVertex2f(SCREEN_WIDTH*(.17+scale*a/sum), SCREEN_HEIGHT*.049);
+	glTexCoord2f(0,0);	glVertex2f(SCREEN_WIDTH*(.17+scale*a/sum), 0);
 	glEnd();
 	//shirley
 		glBindTexture(GL_TEXTURE_2D, hudtexture[3]);
 	glBegin(GL_QUADS);
-	glTexCoord2f(0,1);	glVertex2f(0, SCREEN_HEIGHT*.12);
-	glTexCoord2f(1,1);	glVertex2f(0, SCREEN_HEIGHT*.09);
-	glTexCoord2f(1,0);	glVertex2f(SCREEN_WIDTH, SCREEN_HEIGHT*.09);
-	glTexCoord2f(0,0);	glVertex2f(SCREEN_WIDTH, SCREEN_HEIGHT*.12);
+	glTexCoord2f(0,1);	glVertex2f(SCREEN_WIDTH*.17, SCREEN_HEIGHT*.12);
+	glTexCoord2f(1,1);	glVertex2f(SCREEN_WIDTH*.17, SCREEN_HEIGHT*.09);
+	glTexCoord2f(1,0);	glVertex2f(SCREEN_WIDTH*(.17+scale*s/sum), SCREEN_HEIGHT*.09);
+	glTexCoord2f(0,0);	glVertex2f(SCREEN_WIDTH*(.17+scale*s/sum), SCREEN_HEIGHT*.12);
 	glEnd();
 
 	// mask
@@ -139,17 +143,17 @@ void drawhud(GVersion &version, int versionnum){
 	glEnd();
 	glDisable(GL_BLEND);
 	
-	//hud
-	glBindTexture(GL_TEXTURE_2D, hudtexture[4]);
-	glBegin(GL_QUADS);
-	glTexCoord2f(0,1);	glVertex2f(0, SCREEN_HEIGHT*.8);
-	glTexCoord2f(1,1);	glVertex2f(0, SCREEN_HEIGHT);
-	glTexCoord2f(1,0);	glVertex2f(SCREEN_WIDTH, SCREEN_HEIGHT);
-	glTexCoord2f(0,0);	glVertex2f(SCREEN_WIDTH, SCREEN_HEIGHT*.8);
-	glEnd();
+	////hud
+	//glBindTexture(GL_TEXTURE_2D, hudtexture[4]);
+	//glBegin(GL_QUADS);
+	//glTexCoord2f(0,1);	glVertex2f(0, SCREEN_HEIGHT*.8);
+	//glTexCoord2f(1,1);	glVertex2f(0, SCREEN_HEIGHT);
+	//glTexCoord2f(1,0);	glVertex2f(SCREEN_WIDTH, SCREEN_HEIGHT);
+	//glTexCoord2f(0,0);	glVertex2f(SCREEN_WIDTH, SCREEN_HEIGHT*.8);
+	//glEnd();
 
 
-	glDisable(GL_BLEND);
+	//glDisable(GL_BLEND);
 
 	glEnable(GL_DEPTH_TEST);
 
