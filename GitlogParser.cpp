@@ -65,8 +65,8 @@ int gflagTrigger(string str, string keyword){
 	}
 	if (str.substr(index, keyword.size()) == keyword)
 		return 1;//triger start element
-	else if(str.substr(index,keyword.size()+3)=="</"+keyword+">")
-		return -1;//triger finish element
+	//else if(str.substr(index,keyword.size()+3)=="</"+keyword+">")
+		//return -1;//triger finish element
 	return 0;//default
 }
 
