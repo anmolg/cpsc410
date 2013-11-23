@@ -98,7 +98,9 @@ void drawSphere(float sphereRadius, float orbitRadius, float orbitSpeed, Celesti
 		else glBindTexture(GL_TEXTURE_2D, galaxy_texture[1]);
 	}	
 	else if (type == PLANET){
-		glBindTexture(GL_TEXTURE_2D, galaxy_texture[2]);}	
+		if (psize < 100) glBindTexture(GL_TEXTURE_2D, galaxy_texture[7]);
+		else glBindTexture(GL_TEXTURE_2D, galaxy_texture[2]);
+	}	
 
 	glRotatef(orbitSpeed*g_time*60,0,1,0);	
 	glTranslatef(orbitRadius,0,0);
