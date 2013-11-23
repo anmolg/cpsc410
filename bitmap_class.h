@@ -1,3 +1,5 @@
+// Citation: gametutorials.com
+
 #ifndef	BITMAP_CLASS_H
 #define	BITMAP_CLASS_H
 

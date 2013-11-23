@@ -16,6 +16,13 @@ HGLRC g_hRC;											// General OpenGL_DC - Our Rendering Context for OpenGL
 HINSTANCE g_hInstance;									// This holds the global hInstance for UnregisterClass() in DeInit()
 
 UINT g_Texture[6] = {0};
+GLfloat ambientColor[] = {0.2f, 0.2f, 0.2f, 1.0f};
+    //Add positioned light
+    GLfloat lightColor0[] = {0.5f, 0.5f, 0.5f, 1.0f}; //Color (0.5, 0.5, 0.5)
+    GLfloat lightPos0[] = {0.0f, 15.0f, 0.0f, 1.0f}; //Positioned at (4, 0, 8)
+    GLfloat lightPos1[] = {0.0f, 45.0f, 0.0f, 1.0f}; //Positioned at (4, 0, 8)
+    GLfloat lightPos2[] = {0.0f, -15.0f, 0.0f, 1.0f}; //Positioned at (4, 0, 8)
+    GLfloat lightPos3[] = {0.0f, -45.0f, 0.0f, 1.0f}; //Positioned at (4, 0, 8)
 
 GVersion version = GVersion(0);
 float COMMIT_TIME_INTERVAL = 1.0;
@@ -136,12 +143,12 @@ void Init(HWND hWnd)
 	InitializeOpenGL(g_rRect.right, g_rRect.bottom);	// Init OpenGL with the global rect
 	initVersions();
 
-	CreateTexture(g_Texture[BACK_ID], "Back.bmp");
-	CreateTexture(g_Texture[FRONT_ID], "Front.bmp");
-	CreateTexture(g_Texture[BOTTOM_ID], "Bottom.bmp");
-	CreateTexture(g_Texture[TOP_ID], "Top.bmp");
-	CreateTexture(g_Texture[LEFT_ID], "Left.bmp");
-	CreateTexture(g_Texture[RIGHT_ID], "Right.bmp");
+	CreateTexture(g_Texture[BACK_ID], "Resources/textures/Back.bmp");
+	CreateTexture(g_Texture[FRONT_ID], "Resources/textures/Front.bmp");
+	CreateTexture(g_Texture[BOTTOM_ID], "Resources/textures/Bottom.bmp");
+	CreateTexture(g_Texture[TOP_ID], "Resources/textures/Top.bmp");
+	CreateTexture(g_Texture[LEFT_ID], "Resources/textures/Left.bmp");
+	CreateTexture(g_Texture[RIGHT_ID], "Resources/textures/Right.bmp");
 	// Init our camera position
 	srand (time(NULL));
 						// Position        View		   Up Vector
@@ -266,7 +273,25 @@ void RenderScene()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear The Screen And The Depth Buffer
 	glLoadIdentity();									// Reset The matrix
 	g_Camera.Look();
+	glEnable(GL_LIGHTING);
+glEnable(GL_LIGHT0);
+glEnable(GL_LIGHT1);
+glEnable(GL_LIGHT2);
+glEnable(GL_LIGHT3);
+glEnable(GL_LIGHT4);
+glEnable(GL_LIGHT5);
+    glEnable(GL_COLOR);
 	
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientColor);
+	    glLightfv(GL_LIGHT1, GL_DIFFUSE, lightColor0);
+    glLightfv(GL_LIGHT2, GL_POSITION, lightPos0);
+	
+    glLightfv(GL_LIGHT3, GL_POSITION, lightPos1);
+	
+    glLightfv(GL_LIGHT4, GL_POSITION, lightPos2);
+	
+    glLightfv(GL_LIGHT5, GL_POSITION, lightPos3);
+
 
 	int pIndex = 0;
 	foreach(package,(version.childPackages),vector<GPackage>) {
@@ -277,7 +302,7 @@ void RenderScene()
 	}
 	
 	glColor3f(1,1,1);
-	//CreateSkyBox(0, 0, 0, 300, 150, 300);
+	CreateSkyBox(0, 0, 0, 300, 150, 300);
 	// Swap the backbuffers to the foreground
 	SwapBuffers(g_hDC);									
 }
