@@ -55,6 +55,7 @@ public:
 	// Field Variables
 	int versionNumber;
 	vector<GPackage> childPackages;
+	vector<Authors> authors;			// 125 entries, accumulative.
 	bool alive;
 };
 
@@ -97,7 +98,6 @@ public:
 	int endTime;						// commit number where method was deleted,default to be infinity
 	vector<int> size;					// number of lines, the 0th element is a dummy
 	// number of edits by each author to determine the RGB coloring
-	vector<Authors> authors;			// 125 entries, accumulative.
 	// a value between 0 and 100
 	int psize;					// Used in the animation, for shrinking and expanding the planets (has nothing to do with parsing)
 	bool alive;
