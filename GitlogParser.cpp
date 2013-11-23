@@ -1,120 +1,111 @@
-#include "GitlogParser.h"
-using namespace std;
+// you will see EXTREME similarities to http://cs.dvc.edu/HowTo_Cparse.html
+#include <iostream>
+using std::cout;
+using std::cin;
+using std::endl;
 
-void gpreparse(GVersion &version);
-bool grealParse(GVersion &version);
-void gupdate(GVersion &version, int versionNumber);
-//void postparse(GVersion &version, int versionNumber);
+#include <fstream>
+using std::ifstream;
 
+#include <cstring>
+#include "Model.h"
 
-string toString(double number);
-//vector<GClass> tempClasses;
-//vector<GMethod> tempMethods;
-//vector<GPackage> tempPackages;
-int versionNumber = 0;
-	bool authorAnmol = false;
-	bool authorJimmy = false;
-	bool authorShirley = false;
+const int MAX_CHARS_PER_LINE = 512;
+const int MAX_TOKENS_PER_LINE = 20;
+const char* const DELIMITER = " ";
 
-bool GitlogParser::glparse(GVersion &version){
-	// clear the temp vectors at the start of parsing.
-	//tempClasses.clear();
-	//tempPackages.clear();
-
-	// if version is not empty, do parsing preparations.
-	//gpreparse(version);
-	grealParse(version);
-	//update(version, filename);
-	//postparse(version, filename);
-	return true;
-};
-
-
-/*helper function to parse a line of XML, if the keyword matches
-return:
-target number OR
--1 if keyword doesn't match
-input:
-str: input line of XML file
-*/
-//getNumber("			<METHODNAME>_init_</METHODNAME>","METHODNAME") = -1
-//getNumber("			<METHODFROMLINE>22</METHODFROMLINE>","METHODFROMLINE") = 22
-
-/*get class name ANNNNND package name from FILEPATH
-return:
-a 2-element vector of string: ["fileName","pakageName"]
-or if the line is not FILEPATH or not end with ".java": ["",""] 2 empty strings
-str: input line of XML file
-
-/*triger a flag for isReading an element of XML file ,for example
-<FILE>		return 1:start 
-...		return 0:in progress
-</FILE>		return -1:end
-*/
-
-int gflagTrigger(string str, string keyword){
-	size_t index = 0;
-	int numLength =0;
-	int result =-1;
-	while (index < str.size())
-	{
-		if (isspace(str[index]))
-			index++;
-		else
-			break;
-	}
-	if (str.substr(index, keyword.size()) == keyword)
-		return 1;//triger start element
-	//else if(str.substr(index,keyword.size()+3)=="</"+keyword+">")
-		//return -1;//triger finish element
-	return 0;//default
-}
-
-bool grealParse(GVersion &version) //filename is the version number
-{	string line, targetString;
-//	s = toString(filename);
-	//cout <<s.c_str()<<endl;
-	ifstream file ("gitlog.txt");
-
-
-	if (file.is_open())
-	{
-		int iClass = 0;
-		Authors tempA;
-		while ( file.good() )
-		{
-			getline (file,line);
-			if (gflagTrigger(line, "Author: Anmol")==1){
-				authorAnmol = true;
-				authorJimmy = false;
-				authorShirley = false;
-				versionNumber++;
-				Authors oldAuthor = version.authors[versionNumber - 1];
-				oldAuthor.author_a++;
-				version.authors.push_back(oldAuthor);
-				
-			}
-			else if(gflagTrigger(line, "Author: Jimmy")==-1){
-				versionNumber++;
-				Authors oldAuthor = version.authors[versionNumber - 1];
-				oldAuthor.author_j++;
-				version.authors.push_back(oldAuthor);
-			}
-
-			else if (gflagTrigger(line, "Author: xueqixu")==1){
-				authorAnmol = false;
-				authorJimmy = false;
-				authorShirley = true;
-				versionNumber++;
-				
-				Authors oldAuthor = version.authors[versionNumber - 1];
-				oldAuthor.author_a++;
-				version.authors.push_back(oldAuthor);
 	
-			}
-			
+int anmolTimes = 0;
+int jimmyTimes = 0;
+int shirleyTimes = 0;
+int versionNumber = 0;
+
+int gitlogParser(GVersion &version);
+
+
+int main(GVersion &version) {
+	
+	Authors start;
+	start.author_a = 0;
+	start.author_j = 0;
+	start.author_s = 0;
+
+	version.authors.push_back(start);
+
+	gitlogParser(version);
+	cout << "Anmol: " << anmolTimes << endl;
+	cout << "Jimmy: " << jimmyTimes << endl;
+	cout << "Shirley: " << shirleyTimes << endl;
+ 
+	return 0;
+
+}
+int gitlogParser(GVersion &version)
+{
+  // create a file-reading object
+  ifstream fin;
+  fin.open("log.txt"); // open a file
+  if (!fin.good()) 
+    return 1; // exit if file not found
+  
+  // read each line of the file
+  while (!fin.eof())
+  {
+    // read an entire line into memory
+    char buf[MAX_CHARS_PER_LINE];
+    fin.getline(buf, MAX_CHARS_PER_LINE);
+    
+    // parse the line into blank-delimited tokens
+    int n = 0; // a for-loop index
+    
+    // array to store memory addresses of the tokens in buf
+    const char* token[MAX_TOKENS_PER_LINE] = {}; // initialize to 0
+    
+    // parse the line
+    token[0] = strtok(buf, DELIMITER); // first token
+    if (token[0]) // zero if line is blank
+    {
+      for (n = 1; n < MAX_TOKENS_PER_LINE; n++)
+      {
+		  //cout << buf << endl;
+        token[n] = strtok(0, DELIMITER); // subsequent tokens
+        if (!token[n]) break; // no more tokens
+      }
+    }
+	if (token[1] != NULL) { 
+		const char * tok;
+		tok = token[1];
+		const char * anmol = "Anmol";
+		const char * jimmy = "Jimmy";
+		const char * shirley = "xueqixu";
+		int compAnmol = strcmp (tok, anmol);
+		if (compAnmol == 0) {
+			Authors old = version.authors[versionNumber];
+			old.author_a++;
+			version.authors.push_back(old);
+			versionNumber++;
+		}
+		
+		int compJimmy = strcmp (tok, jimmy);
+		if (compJimmy == 0) {
+			Authors old = version.authors[versionNumber];
+			old.author_j++;
+			version.authors.push_back(old);
+			versionNumber++;
+		}
+		
+		int compShirley = strcmp (tok, shirley);
+		if (compShirley == 0) {
+			Authors old = version.authors[versionNumber];
+			old.author_s++;
+			version.authors.push_back(old);
+			versionNumber++;
 		}
 	}
-	file.close();
-	return true;
+	
+	
+
+  }
+
+ 
 }
