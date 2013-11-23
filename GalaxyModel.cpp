@@ -30,6 +30,10 @@ void loadgalaxytextures(){
 	CreateTexture(galaxy_texture[0],"Resources/textures/ModelSun.bmp");
 	CreateTexture(galaxy_texture[1],"Resources/textures/Moon.bmp");
 	CreateTexture(galaxy_texture[2],"Resources/textures/Planet.bmp");
+	CreateTexture(galaxy_texture[3],"Resources/textures/ModelSun.bmp");
+	CreateTexture(galaxy_texture[4],"Resources/textures/UISun.bmp");
+	CreateTexture(galaxy_texture[5],"Resources/textures/TransactionsSun.bmp");
+	CreateTexture(galaxy_texture[6],"Resources/textures/JDBCSun.bmp");
 }
 
 // 
@@ -49,13 +53,17 @@ void drawSphere(float sphereRadius, float orbitRadius, float orbitSpeed, Celesti
 	gluQuadricDrawStyle(pObj, GLU_FILL);
 	gluQuadricTexture(pObj, 1);						// This turns on texture coordinates for our Quadrics
 	gluQuadricNormals(pObj, GLU_SMOOTH);
+	
 
 	if (type == STAR){
-		if (currentPackageName == "ui"){}
-		if (currentPackageName == "transactions"){}
-		if (currentPackageName == ".."){}
-		if (currentPackageName == "ui"){}
-		glBindTexture(GL_TEXTURE_2D, galaxy_texture[0]);	
+		if (currentPackageName == "ui"){
+		glBindTexture(GL_TEXTURE_2D, galaxy_texture[4]);}
+		if (currentPackageName == "transactions"){
+		glBindTexture(GL_TEXTURE_2D, galaxy_texture[5]);}
+		if (currentPackageName == "model"){
+		glBindTexture(GL_TEXTURE_2D, galaxy_texture[3]);}
+		if (currentPackageName == "jdbc"){
+		glBindTexture(GL_TEXTURE_2D, galaxy_texture[6]);}
 	}
 	else if (type == MOON){
 		glBindTexture(GL_TEXTURE_2D, galaxy_texture[1]);}	
