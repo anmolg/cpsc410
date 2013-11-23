@@ -121,7 +121,6 @@ vector<string> getGClassName(string str){
 
 			}
 			result[0]=str.substr(index+1,cNameLength);
-			//cout<<result[0]<<endl;
 			index =str.length() - 17 -cNameLength;//search for class name
 			index--;
 			while (i>index)
@@ -134,7 +133,6 @@ vector<string> getGClassName(string str){
 					break;
 			}
 			result[1]=str.substr(index+1,pNameLength);
-			//cout<<result[1]<<endl;
 
 		};
 	}
@@ -167,7 +165,6 @@ int flagTrigger(string str, string keyword){
 bool realParse(int filename) //filename is the version number
 {	string line, targetString, s;
 	s= toString(filename);
-	//cout <<s.c_str()<<endl;
 	ifstream file (s.c_str());
 
 	bool isCheckingFile = false;	// file lines trigger
@@ -266,8 +263,6 @@ bool realParse(int filename) //filename is the version number
 		//---------------------parse duplication stuff-------------------------
 		//todo
 	};
-	//cout<<"hello "<<tempClasses[0].creationTime<<endl;
-	//cout<<"hi "<<tempMethods[1].methodName<<endl;
 	file.close();
 
 	foreach(gclone,tempClones, vector<GClone>){
@@ -351,10 +346,6 @@ void update(GVersion &v, int versionNumber){
 					gclass->size.push_back(0);						//preserve the last slot for the real size
 				}
 				//// add method info
-				//foreach(gmethod,gclass->childMethods,vector<GMethod>) {
-				//	gmethod->creationTime = versionNumber;
-				//	gmethod->id = gmethod->newID();
-				//}
 				gclass->size.push_back(gclass->size[0]);			//set the real size for this version
 				gclass->creationTime = versionNumber;					
 				v.childPackages[indexP].childClasses.push_back(*gclass);//add the new class to the package

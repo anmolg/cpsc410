@@ -21,27 +21,6 @@ int jimmyTimes = 0;
 int shirleyTimes = 0;
 int versionNumber = 0;
 
-//bool glParser(GVersion &version);
-
-
-/*int main(GVersion &version) {
-	
-	Authors start;
-	start.author_a = 0;
-	start.author_j = 0;
-	start.author_s = 0;
-
-	version.authors.push_back(start);
-
-	gitlogParser(version);
-	cout << "Anmol: " << anmolTimes << endl;
-	cout << "Jimmy: " << jimmyTimes << endl;
-	cout nt "Shirley: " << shirleyTimes << endl;
- 
-	return 0;
-
-}
-*/
 int GitlogParser::glparse(GVersion &version)
 {
 	Authors start;
@@ -75,7 +54,6 @@ int GitlogParser::glparse(GVersion &version)
     {
       for (n = 1; n < MAX_TOKENS_PER_LINE; n++)
       {
-		  //cout << buf << endl;
         token[n] = strtok(0, DELIMITER); // subsequent tokens
         if (!token[n]) break; // no more tokens
       }
