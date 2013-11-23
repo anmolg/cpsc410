@@ -169,6 +169,7 @@ void drawPackage(GPackage& gp,int p_index) {
 	glColor3f(1,0.84,0);
 
 	currentPackageName = gp.packageName;
+	if (commitNumber > 15) glScalef(10,10,10);
 	drawSphere(STAR_RADIUS,0,0,STAR,gp.psize);
 
 	int index = 1;
