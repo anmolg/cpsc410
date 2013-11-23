@@ -130,6 +130,7 @@
     <ClCompile Include="GalaxyModel.cpp" />
     <ClCompile Include="GitlogParser.cpp" />
     <ClCompile Include="gl_texture.cpp" />
+    <ClCompile Include="hud.cpp" />
     <ClCompile Include="Init.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Model.cpp" />
@@ -143,6 +144,7 @@
     <ClInclude Include="GalaxyModel.h" />
     <ClInclude Include="GitlogParser.h" />
     <ClInclude Include="gl_texture.h" />
+    <ClInclude Include="hud.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="particle.h" />

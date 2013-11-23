@@ -287,15 +287,11 @@ glEnable(GL_LIGHT3);
 glEnable(GL_LIGHT4);
 glEnable(GL_LIGHT5);
     glEnable(GL_COLOR);
-	
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientColor);
-	    glLightfv(GL_LIGHT1, GL_DIFFUSE, lightColor0);
+	glLightfv(GL_LIGHT1, GL_DIFFUSE, lightColor0);
     glLightfv(GL_LIGHT2, GL_POSITION, lightPos0);
-	
     glLightfv(GL_LIGHT3, GL_POSITION, lightPos1);
-	
     glLightfv(GL_LIGHT4, GL_POSITION, lightPos2);
-	
     glLightfv(GL_LIGHT5, GL_POSITION, lightPos3);
 
 
@@ -309,6 +305,10 @@ glEnable(GL_LIGHT5);
 	
 	glColor3f(1,1,1);
 	CreateSkyBox(0, 0, 0, 300, 150, 300);
+	
+	glDisable(GL_LIGHTING);
+	drawhud(version, (int)commitNumber);
+	
 	// Swap the backbuffers to the foreground
 	SwapBuffers(g_hDC);									
 }

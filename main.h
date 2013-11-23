@@ -18,6 +18,7 @@
 #include "gl_texture.h"
 #include "particle.h"
 #include <vector>
+#include "hud.h"
 
 #define SCREEN_WIDTH 800								// We want our screen width 800 pixels
 #define SCREEN_HEIGHT 600								// We want our screen height 600 pixels
