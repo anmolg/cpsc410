@@ -26,7 +26,7 @@
 extern float g_time;						// The global time variable
 extern float commitNumber;					// to get the integer commit number, do (int)
 extern CParticle gParticles[MAX_PARTICLES]; // An array of particles
-
+extern CParticle gParticles2[MAX_PARTICLES];
 
 // This is our basic 3D point/vector class
 struct CVector3

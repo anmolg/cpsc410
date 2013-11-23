@@ -42,6 +42,10 @@ bool CParticle::init(const CPos &p, const CVector &v, float lifeSpan, float s, f
 		return true;
 }
 
+void CParticle::changeToYellow() {
+		mTexture.load("particlesYellow.bmp"); // Load the texture
+}
+
 void CParticle::process(float dt)
 {
 	// If particle is dead, reset it's position

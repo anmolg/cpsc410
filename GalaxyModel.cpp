@@ -34,6 +34,7 @@ void loadgalaxytextures(){
 	CreateTexture(galaxy_texture[4],"Resources/textures/UISun.bmp");
 	CreateTexture(galaxy_texture[5],"Resources/textures/TransactionsSun.bmp");
 	CreateTexture(galaxy_texture[6],"Resources/textures/JDBCSun.bmp");
+	CreateTexture(galaxy_texture[7],"Resources/textures/GreenMoon.bmp");
 }
 
 // draw particles for burning moons
@@ -43,6 +44,32 @@ void drawBurningMoon() {
 		gParticles[i].render();
 		gParticles[i].process(dt);
 	}
+
+	glPushMatrix();
+	glRotatef(180,0,1,0);
+	for(int i = 0; i < MAX_PARTICLES; ++i)
+	{
+		gParticles[i].render();
+		gParticles[i].process(dt);
+	}
+	glPopMatrix();
+}
+
+void drawYellowBurningMoon() {
+	for(int i = 0; i < MAX_PARTICLES; ++i)
+	{
+		gParticles2[i].render();
+		gParticles2[i].process(dt);
+	}
+
+	glPushMatrix();
+	glRotatef(180,0,1,0);
+	for(int i = 0; i < MAX_PARTICLES; ++i)
+	{
+		gParticles2[i].render();
+		gParticles2[i].process(dt);
+	}
+	glPopMatrix();
 }
 
 void drawSphere(float sphereRadius, float orbitRadius, float orbitSpeed, CelestialType type, int& psize)
@@ -53,7 +80,8 @@ void drawSphere(float sphereRadius, float orbitRadius, float orbitSpeed, Celesti
 	gluQuadricDrawStyle(pObj, GLU_FILL);
 	gluQuadricTexture(pObj, 1);						// This turns on texture coordinates for our Quadrics
 	gluQuadricNormals(pObj, GLU_SMOOTH);
-	
+
+	if (psize < 100) psize++;
 
 	if (type == STAR){
 		if (currentPackageName == "ui"){
@@ -66,21 +94,19 @@ void drawSphere(float sphereRadius, float orbitRadius, float orbitSpeed, Celesti
 		glBindTexture(GL_TEXTURE_2D, galaxy_texture[6]);}
 	}
 	else if (type == MOON){
-		glBindTexture(GL_TEXTURE_2D, galaxy_texture[1]);}	
+		if (psize < 100) glBindTexture(GL_TEXTURE_2D, galaxy_texture[7]);
+		else glBindTexture(GL_TEXTURE_2D, galaxy_texture[1]);
+	}	
 	else if (type == PLANET){
 		glBindTexture(GL_TEXTURE_2D, galaxy_texture[2]);}	
 
 	glRotatef(orbitSpeed*g_time*60,0,1,0);	
 	glTranslatef(orbitRadius,0,0);
 	glPushMatrix();
-	glRotatef(60*g_time, 0, 1.0, 0);			// Rotate the sphere around itself to produce the spin
+	glRotatef(60*g_time, 0, -1, 0);			// Rotate the sphere around itself to produce the spin
 
 	float sfactor = psize/100.0;
 	glScalef(sfactor,sfactor,sfactor);
-	if (psize < 100) {
-		glColor3f(0,1,0);
-		psize++;
-	}
 
 	gluSphere(pObj, sphereRadius, 24, 24);
 
@@ -105,9 +131,9 @@ void drawMethod(GMethod& gm, int index,float p_radius) {
 		MOON,
 		gm.psize); // Last parameter just for testing
 	if (gm.duplications[(int) min(commitNumber,gm.duplications.size()-1)]) {
-		if (gm.p_timer < 60) { glColor3f(1,0,0); gm.p_timer++;}
-		else glColor3f(1,1,0);
-		drawBurningMoon();
+		if (gm.p_timer < 100) { gm.p_timer++;drawBurningMoon();}
+		else drawYellowBurningMoon();
+		
 	}
 	glPopMatrix();
 }

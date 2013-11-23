@@ -26,7 +26,7 @@ class CParticle
 		
 		void process(float dt); // Moves the particle each frame
 		void render(); // Renders the particle to screen
-		
+		void changeToYellow();
 		// If the a particle's life is greater than zero, it's considered active
 		// otherwise it's deactivate
 		bool isAlive() { return (mLife > 0.0f); }
