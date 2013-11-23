@@ -5,7 +5,8 @@
 #include "particle.h"
 
 CParticle gParticles[MAX_PARTICLES]; // An array of particles
-vector<CParticle> particles;
+CParticle gParticles2[MAX_PARTICLES];
+
 ///////////////////////////////// CHANGE TO FULL SCREEN \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
 /////
 /////	This changes the screen to FULL SCREEN
@@ -293,13 +294,28 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hprev, PSTR cmdline, int ishow
 			RAND(0.0f, 2.0f), // Lifespan
 			0.4f, // Size 
 			30.0f, // UV rotation angle
-			"particle.bmp")) // Texture name
+			"particlesRed.bmp")) // Texture name
 		{
 			ReleaseDC(hWnd, hdc);
 			return EXIT_FAILURE;
 		}
 	}
 
+	for(int i = 0; i < MAX_PARTICLES; ++i)
+	{
+		// If we fail to initialize any of the particles, exit the app
+		GLfloat pSpeed = 1.0f;
+		if(!gParticles2[i].init(CPos(0,0,0), // Position
+			CVector(RAND(-pSpeed, pSpeed), RAND(0, pSpeed), RAND(-pSpeed, pSpeed)), // Velocity
+			RAND(0.0f, 2.0f), // Lifespan
+			0.4f, // Size 
+			30.0f, // UV rotation angle
+			"particlesYellow.bmp")) // Texture name
+		{
+			ReleaseDC(hWnd, hdc);
+			return EXIT_FAILURE;
+		}
+	}
 	// Run our message loop and after it's done, return the result
 	return MainLoop();						
 }
