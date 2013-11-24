@@ -15,118 +15,19 @@ HDC   g_hDC;											// General HDC - (handle to device context)
 HGLRC g_hRC;											// General OpenGL_DC - Our Rendering Context for OpenGL
 HINSTANCE g_hInstance;									// This holds the global hInstance for UnregisterClass() in DeInit()
 
-UINT g_Texture[6] = {0};
 GLfloat ambientColor[] = {0.2f, 0.2f, 0.2f, 1.0f};
-    //Add positioned light
-    GLfloat lightColor0[] = {0.5f, 0.5f, 0.5f, 1.0f}; //Color (0.5, 0.5, 0.5)
-    GLfloat lightPos0[] = {0.0f, 15.0f, 0.0f, 1.0f}; //Positioned at (4, 0, 8)
-    GLfloat lightPos1[] = {0.0f, 45.0f, 0.0f, 1.0f}; //Positioned at (4, 0, 8)
-    GLfloat lightPos2[] = {0.0f, -15.0f, 0.0f, 1.0f}; //Positioned at (4, 0, 8)
-    GLfloat lightPos3[] = {0.0f, -45.0f, 0.0f, 1.0f}; //Positioned at (4, 0, 8)
+//Add positioned light
+GLfloat lightColor0[] = {0.5f, 0.5f, 0.5f, 1.0f}; //Color (0.5, 0.5, 0.5)
+GLfloat lightPos0[] = {0.0f, 15.0f, 0.0f, 1.0f}; //Positioned at (4, 0, 8)
+GLfloat lightPos1[] = {0.0f, 45.0f, 0.0f, 1.0f}; //Positioned at (4, 0, 8)
+GLfloat lightPos2[] = {0.0f, -15.0f, 0.0f, 1.0f}; //Positioned at (4, 0, 8)
+GLfloat lightPos3[] = {0.0f, -45.0f, 0.0f, 1.0f}; //Positioned at (4, 0, 8)
 
 GVersion version = GVersion(0);
 float COMMIT_TIME_INTERVAL = 4.0;
 
 float commitNumber;
-#define BACK_ID		0									// The texture ID for the back side of the cube
-#define FRONT_ID	1									// The texture ID for the front side of the cube
-#define BOTTOM_ID	2									// The texture ID for the bottom side of the cube
-#define TOP_ID		3									// The texture ID for the top side of the cube
-#define LEFT_ID		4									// The texture ID for the left side of the cube
-#define RIGHT_ID	5									// The texture ID for the right side of the cube
 
-extern UINT g_Texture[6];						// This holds the texture info, referenced by an ID
-
-///////////////////////////////// CREATE SKY BOX \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
-
-void CreateSkyBox(float x, float y, float z, float width, float height, float length)
-{
-
-	// Bind the BACK texture of the sky map to the BACK side of the cube
-	glBindTexture(GL_TEXTURE_2D, g_Texture[BACK_ID]);
-
-	x = x - width  / 2;
-	y = y - height / 2;
-	z = z - length / 2;
-
-		// Start drawing the side as a QUAD
-	glBegin(GL_QUADS);		
-		
-		// Assign the texture coordinates and vertices for the BACK Side
-		glTexCoord2f(1.0f, 0.0f); glVertex3f(x + width, y,			z);
-		glTexCoord2f(1.0f, 1.0f); glVertex3f(x + width, y + height, z); 
-		glTexCoord2f(0.0f, 1.0f); glVertex3f(x,			y + height, z);
-		glTexCoord2f(0.0f, 0.0f); glVertex3f(x,			y,			z);
-		
-	glEnd();
-
-	// Bind the FRONT texture of the sky map to the FRONT side of the box
-	glBindTexture(GL_TEXTURE_2D, g_Texture[FRONT_ID]);
-
-	// Start drawing the side as a QUAD
-	glBegin(GL_QUADS);	
-	
-		// Assign the texture coordinates and vertices for the FRONT Side
-		glTexCoord2f(1.0f, 0.0f); glVertex3f(x,			y,			z + length);
-		glTexCoord2f(1.0f, 1.0f); glVertex3f(x,			y + height, z + length);
-		glTexCoord2f(0.0f, 1.0f); glVertex3f(x + width, y + height, z + length); 
-		glTexCoord2f(0.0f, 0.0f); glVertex3f(x + width, y,			z + length);
-	glEnd();
-
-	// Bind the BOTTOM texture of the sky map to the BOTTOM side of the box
-	glBindTexture(GL_TEXTURE_2D, g_Texture[BOTTOM_ID]);
-
-	// Start drawing the side as a QUAD
-	glBegin(GL_QUADS);		
-	
-		// Assign the texture coordinates and vertices for the BOTTOM Side
-		glTexCoord2f(1.0f, 0.0f); glVertex3f(x,			y,			z);
-		glTexCoord2f(1.0f, 1.0f); glVertex3f(x,			y,			z + length);
-		glTexCoord2f(0.0f, 1.0f); glVertex3f(x + width, y,			z + length); 
-		glTexCoord2f(0.0f, 0.0f); glVertex3f(x + width, y,			z);
-	glEnd();
-
-	// Bind the TOP texture of the sky map to the TOP side of the box
-	glBindTexture(GL_TEXTURE_2D, g_Texture[TOP_ID]);
-	
-	// Start drawing the side as a QUAD
-	glBegin(GL_QUADS);		
-		
-		// Assign the texture coordinates and vertices for the TOP Side
-		glTexCoord2f(0.0f, 1.0f); glVertex3f(x + width, y + height, z);
-		glTexCoord2f(0.0f, 0.0f); glVertex3f(x + width, y + height, z + length); 
-		glTexCoord2f(1.0f, 0.0f); glVertex3f(x,			y + height,	z + length);
-		glTexCoord2f(1.0f, 1.0f); glVertex3f(x,			y + height,	z);
-		
-	glEnd();
-
-	// Bind the LEFT texture of the sky map to the LEFT side of the box
-	glBindTexture(GL_TEXTURE_2D, g_Texture[LEFT_ID]);
-	
-	// Start drawing the side as a QUAD
-	glBegin(GL_QUADS);		
-		
-		// Assign the texture coordinates and vertices for the LEFT Side
-		glTexCoord2f(1.0f, 1.0f); glVertex3f(x,			y + height,	z);	
-		glTexCoord2f(0.0f, 1.0f); glVertex3f(x,			y + height,	z + length); 
-		glTexCoord2f(0.0f, 0.0f); glVertex3f(x,			y,			z + length);
-		glTexCoord2f(1.0f, 0.0f); glVertex3f(x,			y,			z);		
-		
-	glEnd();
-
-	// Bind the RIGHT texture of the sky map to the RIGHT side of the box
-	glBindTexture(GL_TEXTURE_2D, g_Texture[RIGHT_ID]);
-
-	// Start drawing the side as a QUAD
-	glBegin(GL_QUADS);		
-
-		// Assign the texture coordinates and vertices for the RIGHT Side
-		glTexCoord2f(0.0f, 0.0f); glVertex3f(x + width, y,			z);
-		glTexCoord2f(1.0f, 0.0f); glVertex3f(x + width, y,			z + length);
-		glTexCoord2f(1.0f, 1.0f); glVertex3f(x + width, y + height,	z + length); 
-		glTexCoord2f(0.0f, 1.0f); glVertex3f(x + width, y + height,	z);
-	glEnd();
-}
 ///////////////////////////////// INIT GAME WINDOW \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
 /////
 /////	This function initializes the game window.
@@ -139,60 +40,24 @@ void Init(HWND hWnd)
 	GetClientRect(g_hWnd, &g_rRect);					// Assign the windows rectangle to a global RECT
 	InitializeOpenGL(g_rRect.right, g_rRect.bottom);	// Init OpenGL with the global rect
 	initVersions();
-
-	CreateTexture(g_Texture[BACK_ID], "Resources/textures/Back.bmp");
-	CreateTexture(g_Texture[FRONT_ID], "Resources/textures/Front.bmp");
-	CreateTexture(g_Texture[BOTTOM_ID], "Resources/textures/Bottom.bmp");
-	CreateTexture(g_Texture[TOP_ID], "Resources/textures/Top.bmp");
-	CreateTexture(g_Texture[LEFT_ID], "Resources/textures/Left.bmp");
-	CreateTexture(g_Texture[RIGHT_ID], "Resources/textures/Right.bmp");
 	// Init our camera position
 	srand (time(NULL));
-						// Position        View		   Up Vector
+	// Position        View		   Up Vector
 	g_Camera.PositionCamera(0, -10.0f, 50,   0, -10.0f, 0,   0, 1, 0);
 	loadgalaxytextures();
-	
+
 }
 
 float g_time = 0.0;			// initial time , in seconds
 void initVersions() {
 	// Testing data
-		XMLParser xmlParser = XMLParser();
+	XMLParser xmlParser = XMLParser();
 	for (int i=1;i<15;i++) {
 		xmlParser.parse(i,version);
 		_RPT1( 0, "initVersions : %i\n", i);
-		
-		if(i==121){
-			for (int j=0;j<version.childPackages.size();j++){
-				_RPT1(0, "package: %i\n",j);
-				for(int k=0; k<version.childPackages[j].childClasses.size();k++){
-					int boolNum =0;
-					//if (k,version.childPackages[j].childClasses[k].alive) boolNum=1;
-					_RPT2(0, "	class: %i	size: %i\n",k,version.childPackages[j].childClasses[k].size[i]);
-					//for(int l=0; l<version.childPackages[j].childClasses[k].size.size();l++){
-					//	_RPT2(0, "		size[%i]: %i\n",l,version.childPackages[j].childClasses[k].size[l]);
-					//}
-					for (int l=0;  l<version.childPackages[j].childClasses[k].childMethods.size();l++){
-						_RPT2(0,"		method: %i end time:%i\n",l,version.childPackages[j].childClasses[k].childMethods[l].endTime);
-						for (int m =0; m< version.childPackages[j].childClasses[k].childMethods[l].duplications.size();m++){
-							if (k,version.childPackages[j].childClasses[k].childMethods[l].duplications[m]) boolNum=1;
-							else boolNum =0;
-							_RPT2(0, "			d%i: %i\n",m,boolNum);
-						}
-					}
-				}
-			}
-		}
 	}
 	GitlogParser glParser = GitlogParser();
 	glParser.glparse(version);
-	_RPT1(0,"SIZE OF AUTHERS' VECTOR: %i",version.authors.size()); 
-	for (int authorsN = 0; authorsN < version.authors.size(); authorsN++) {
-		int jimmy = version.authors[authorsN].author_j;
-		int anmol = version.authors[authorsN].author_a;
-		int shirley = version.authors[authorsN].author_s;
-		_RPT4(0, "version: %i, a:%i 	j:%i	s:%i\n",authorsN, anmol, jimmy, shirley);
-	}
 }
 
 /////////////////////////////// ANIMATE NEXT FRAME \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
@@ -252,7 +117,7 @@ WPARAM MainLoop()
 				g_time += (float)1/60.0;
 				commitNumber = g_time/COMMIT_TIME_INTERVAL;
 				g_Camera.Update();							// Update the camera information
-				
+
 				RenderScene();								// Render the scene every frame
 
 
@@ -276,20 +141,22 @@ void RenderScene()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear The Screen And The Depth Buffer
 	glLoadIdentity();									// Reset The matrix
 	g_Camera.Look();
+
+	// Lighting effects
 	glEnable(GL_LIGHTING);
-glEnable(GL_LIGHT0);
-glEnable(GL_LIGHT1);
-glEnable(GL_LIGHT2);
-glEnable(GL_LIGHT3);
-glEnable(GL_LIGHT4);
-glEnable(GL_LIGHT5);
-    glEnable(GL_COLOR);
+	glEnable(GL_LIGHT0);
+	glEnable(GL_LIGHT1);
+	glEnable(GL_LIGHT2);
+	glEnable(GL_LIGHT3);
+	glEnable(GL_LIGHT4);
+	glEnable(GL_LIGHT5);
+	glEnable(GL_COLOR);
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientColor);
 	glLightfv(GL_LIGHT1, GL_DIFFUSE, lightColor0);
-    glLightfv(GL_LIGHT2, GL_POSITION, lightPos0);
-    glLightfv(GL_LIGHT3, GL_POSITION, lightPos1);
-    glLightfv(GL_LIGHT4, GL_POSITION, lightPos2);
-    glLightfv(GL_LIGHT5, GL_POSITION, lightPos3);
+	glLightfv(GL_LIGHT2, GL_POSITION, lightPos0);
+	glLightfv(GL_LIGHT3, GL_POSITION, lightPos1);
+	glLightfv(GL_LIGHT4, GL_POSITION, lightPos2);
+	glLightfv(GL_LIGHT5, GL_POSITION, lightPos3);
 
 
 	int pIndex = 0;
@@ -299,12 +166,12 @@ glEnable(GL_LIGHT5);
 		glPopMatrix();
 		pIndex++;
 	}
-	
+
 	glColor3f(1,1,1);
 
 	glDisable(GL_LIGHTING);
 	drawhud(version, min((int)commitNumber,version.authors.size()));
-	
+
 	// CreateSkyBox(0, 0, 0, 300, 150, 300);
 	// Swap the backbuffers to the foreground
 	SwapBuffers(g_hDC);									
@@ -318,35 +185,35 @@ glEnable(GL_LIGHT5);
 
 LRESULT CALLBACK WinProc(HWND hWnd,UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    LONG    lRet = 0; 
+	LONG    lRet = 0; 
 
-    switch (uMsg)
+	switch (uMsg)
 	{ 
-    case WM_SIZE:										// If the window is resized
+	case WM_SIZE:										// If the window is resized
 		if(!g_bFullScreen)								// Do this only if we are in window mode
 		{
 			SizeOpenGLScreen(LOWORD(lParam),HIWORD(lParam));// LoWord=Width, HiWord=Height
 			GetClientRect(hWnd, &g_rRect);					// Get the window rectangle
 		}
-        break; 
+		break; 
 
 	case WM_KEYDOWN:
 
 		switch(wParam) {								// Check if we hit a key
-			case VK_ESCAPE:								// If we hit the escape key
-				PostQuitMessage(0);						// Send a QUIT message to the window
-				break;
+		case VK_ESCAPE:								// If we hit the escape key
+			PostQuitMessage(0);						// Send a QUIT message to the window
+			break;
 		}
 		break;
 
-    case WM_CLOSE:										// If the window is being closes
-        PostQuitMessage(0);								// Send a QUIT Message to the window
-        break; 
-     
-    default:											// Return by default
-        lRet = DefWindowProc (hWnd, uMsg, wParam, lParam); 
-        break; 
-    } 
- 
-    return lRet;										// Return by default
+	case WM_CLOSE:										// If the window is being closes
+		PostQuitMessage(0);								// Send a QUIT Message to the window
+		break; 
+
+	default:											// Return by default
+		lRet = DefWindowProc (hWnd, uMsg, wParam, lParam); 
+		break; 
+	} 
+
+	return lRet;										// Return by default
 }

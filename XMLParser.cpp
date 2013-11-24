@@ -15,6 +15,7 @@ vector<GClass> tempClasses;
 vector<GMethod> tempMethods;
 vector<GPackage> tempPackages;
 vector<GClone> tempClones;
+
 bool XMLParser::parse(int filename, GVersion &version){
 	// clear the temp vectors at the start of parsing.
 	tempClasses.clear();

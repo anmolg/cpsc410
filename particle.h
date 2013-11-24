@@ -1,3 +1,6 @@
+// Based on the particles tutorial from gametutorials.com
+// Made major modifications to the original tutorial
+
 #ifndef PARTICLE_H
 #define PARTICLE_H
 
@@ -22,7 +25,7 @@ class CParticle
 		
 		// This initializes a particle
 		bool init(const CPos &pos, const CVector &vel, float lifeSpan, float size,
-				  float angle = 0.0f, const char *texName = NULL);
+				  const char *texName = NULL);
 		
 		void process(float dt); // Moves the particle each frame
 		void render(); // Renders the particle to screen
@@ -35,11 +38,9 @@ class CParticle
 	
 		CPos mPos; // World position
 		CVector mVel; // Velocity
-		
-		int mColor; // ARGB color of particle
+	
 		float mSize; // Width/Height dimensions of the particle
 		float mLife; // Life span of particle in seconds
-		float mAngle; // Angle, in degrees, to rotate the texture's UVs every second
 		
 		CGLTexture mTexture; // The texture			 
 };

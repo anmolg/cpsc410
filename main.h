@@ -1,4 +1,5 @@
 // Citation : gametutorials.com
+// Copied and slightly modified to setup Win32 app layout
 
 #ifndef _MAIN_H
 #define _MAIN_H

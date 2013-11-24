@@ -1,4 +1,5 @@
 // Citation: gametutorials.com
+// Copied over this class used for creating bitmap textures.
 
 #ifndef	BITMAP_CLASS_H
 #define	BITMAP_CLASS_H

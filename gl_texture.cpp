@@ -1,3 +1,5 @@
+// Citation:gametutorials.com
+
 #include <assert.h>
 #include "gl_texture.h"
 #include "bitmap_class.h"

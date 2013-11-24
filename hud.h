@@ -1,9 +1,10 @@
 #ifndef _HUD_H
 #define _HUD_H
 
+// This class contains methods for the Heads Up Display
+
 #include "main.h"
 #include "vector.h"
-#include "glut.h"
 #include <sstream>
 
 void drawhud(GVersion &version, int versionnum);

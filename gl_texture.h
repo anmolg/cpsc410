@@ -1,4 +1,5 @@
 // Citation : gametutorials.com
+// Copied this class for loading bitmap textures.
 
 #ifndef GL_TEXTURE_H
 #define GL_TEXTURE_H

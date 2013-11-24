@@ -1,3 +1,5 @@
+// Citation:gametutorials.com
+
 #include "bitmap_class.h"
 
 // Returns true for success -- false otherwise

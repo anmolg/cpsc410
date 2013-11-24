@@ -3,20 +3,17 @@
 #pragma comment(lib,"opengl32.lib")
 #pragma comment(lib,"glu32.lib")
 #include "main.h"
-//#include "gl_obj.h"
 
 // Default constructor -- Zero everything out
 CParticle::CParticle()
 {
 	mSize = 0.0f;
-	mLife = 0.0f;
-	mAngle = 0.0f;
-	
+	mLife = 0.0f;	
 	// All other variables gets initialized with it's constructor
 }
 
 // Init the particle
-bool CParticle::init(const CPos &p, const CVector &v, float lifeSpan, float s, float a, 
+bool CParticle::init(const CPos &p, const CVector &v, float lifeSpan, float s,
 					 const char *texName)
 {
 	mPos = p; // Set the position
@@ -33,17 +30,12 @@ bool CParticle::init(const CPos &p, const CVector &v, float lifeSpan, float s, f
 		return false;
 		
 	mSize = s; // Set the size
-	mAngle = a; // Set the angle of texture UV rotation per second
 
 	
 	if(texName) // If a texture name was specified
 		return mTexture.load(texName); // Load the texture
 	else
 		return true;
-}
-
-void CParticle::changeToYellow() {
-		mTexture.load("particlesYellow.bmp"); // Load the texture
 }
 
 void CParticle::process(float dt)

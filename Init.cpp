@@ -1,3 +1,5 @@
+// Citation:gametutorials.com
+// Win32 application setup
 
 #include "main.h"
 
@@ -293,7 +295,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hprev, PSTR cmdline, int ishow
 			CVector(RAND(-pSpeed, pSpeed), RAND(0, pSpeed), RAND(-pSpeed, pSpeed)), // Velocity
 			RAND(0.0f, 2.0f), // Lifespan
 			0.4f, // Size 
-			30.0f, // UV rotation angle
 			"particlesRed.bmp")) // Texture name
 		{
 			ReleaseDC(hWnd, hdc);
@@ -309,7 +310,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hprev, PSTR cmdline, int ishow
 			CVector(RAND(-pSpeed, pSpeed), RAND(0, pSpeed), RAND(-pSpeed, pSpeed)), // Velocity
 			RAND(0.0f, 2.0f), // Lifespan
 			0.4f, // Size 
-			30.0f, // UV rotation angle
 			"particlesYellow.bmp")) // Texture name
 		{
 			ReleaseDC(hWnd, hdc);

@@ -1,4 +1,5 @@
 // Citation : gametutorials.com
+// Note: Nearly a direct copy
 
 #ifndef _CAMERA_H
 #define _CAMERA_H
